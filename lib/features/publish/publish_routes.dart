@@ -1,13 +1,18 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:findu/core/navigation/app_routes.dart';
-import 'package:findu/core/navigation/placeholder_screen.dart';
+import 'package:findu/features/publish/ui/screens/boost_active_screen.dart';
+import 'package:findu/features/publish/ui/screens/boost_screen.dart';
+import 'package:findu/features/publish/ui/screens/publish_object_screen.dart';
+import 'package:findu/features/publish/ui/screens/publish_pet_screen.dart';
+import 'package:findu/features/publish/ui/screens/published_screen.dart';
+import 'package:findu/features/publish/ui/screens/share_report_screen.dart';
 
 final Map<String, WidgetBuilder> publishRoutes = {
-  AppRoutes.publishObject: (_) => const PlaceholderScreen(figma: '13', title: 'Publicar objeto'),
-  AppRoutes.publishPet: (_) => const PlaceholderScreen(figma: '14', title: 'Reportar mascota'),
-  AppRoutes.published: (_) => const PlaceholderScreen(figma: '15', title: 'Publicación lista'),
-  AppRoutes.shareReport: (_) => const PlaceholderScreen(figma: '16', title: 'Compartir reporte'),
-  AppRoutes.boost: (_) => const PlaceholderScreen(figma: '17', title: 'Impulsar publicación'),
-  AppRoutes.boostActive: (_) => const PlaceholderScreen(figma: '18', title: 'Impulso activo'),
+  AppRoutes.publishObject: (_) => const PublishObjectScreen(),
+  AppRoutes.publishPet: (_) => const PublishPetScreen(),
+  AppRoutes.published: (_) => const PublishedScreen(),
+  AppRoutes.shareReport: (_) => const ShareReportScreen(),
+  AppRoutes.boost: (_) => const BoostScreen(),
+  AppRoutes.boostActive: (_) => const BoostActiveScreen(),
 };
