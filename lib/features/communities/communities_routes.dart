@@ -1,13 +1,18 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:findu/core/navigation/app_routes.dart';
-import 'package:findu/core/navigation/placeholder_screen.dart';
+import 'package:findu/features/communities/ui/screens/admin_panel_screen.dart';
+import 'package:findu/features/communities/ui/screens/communities_screen.dart';
+import 'package:findu/features/communities/ui/screens/create_community_screen.dart';
+import 'package:findu/features/communities/ui/screens/create_sent_screen.dart';
+import 'package:findu/features/communities/ui/screens/join_community_screen.dart';
+import 'package:findu/features/communities/ui/screens/join_pending_screen.dart';
 
 final Map<String, WidgetBuilder> communitiesRoutes = {
-  AppRoutes.communities: (_) => const PlaceholderScreen(figma: '30', title: 'Mis comunidades'),
-  AppRoutes.joinCommunity: (_) => const PlaceholderScreen(figma: '31', title: 'Unirse a una comunidad'),
-  AppRoutes.joinPending: (_) => const PlaceholderScreen(figma: '32', title: 'Solicitud enviada'),
-  AppRoutes.createCommunity: (_) => const PlaceholderScreen(figma: '33', title: 'Crear comunidad'),
-  AppRoutes.createSent: (_) => const PlaceholderScreen(figma: '34', title: 'Solicitud enviada'),
-  AppRoutes.adminPanel: (_) => const PlaceholderScreen(figma: '35', title: 'Panel de administración'),
+  AppRoutes.communities: (_) => const CommunitiesScreen(),
+  AppRoutes.joinCommunity: (_) => const JoinCommunityScreen(),
+  AppRoutes.joinPending: (_) => const JoinPendingScreen(),
+  AppRoutes.createCommunity: (_) => const CreateCommunityScreen(),
+  AppRoutes.createSent: (_) => const CreateSentScreen(),
+  AppRoutes.adminPanel: (_) => const AdminPanelScreen(),
 };
