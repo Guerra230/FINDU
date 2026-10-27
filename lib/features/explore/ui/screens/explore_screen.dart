@@ -122,6 +122,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         status: post.status,
                         feminine: post.feminine,
                         icon: post.icon,
+                        image: post.image,
                         width: double.infinity,
                         height: double.infinity,
                         onTap: () => Navigator.pushNamed(context, AppRoutes.postDetail, arguments: post.id),

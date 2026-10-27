@@ -85,8 +85,9 @@ class _MapScreenState extends State<MapScreen> {
                       decoration: BoxDecoration(
                         color: FdColors.primarySoft,
                         borderRadius: BorderRadius.circular(FdRadius.md),
+                        image: selected.image == null ? null : DecorationImage(image: selected.image!, fit: BoxFit.cover),
                       ),
-                      child: Icon(selected.icon, color: FdColors.primary, size: 36),
+                      child: selected.image == null ? Icon(selected.icon, color: FdColors.primary, size: 36) : null,
                     ),
                     const SizedBox(width: FdSpacing.sm),
                     Expanded(

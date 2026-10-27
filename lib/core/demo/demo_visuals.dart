@@ -28,7 +28,27 @@ extension DemoPostVisuals on DemoPost {
   String get firstName => author.split(' ').first;
 
   String get placeAgo => '$place, $ago';
+
+  ImageProvider? get image => _withPhoto.contains(id) ? AssetImage('assets/posts/$id.png') : null;
 }
+
+const _withPhoto = {
+  'luna',
+  'mateo',
+  'mochila',
+  'billetera',
+  'termo',
+  'cartuchera',
+  'iphone',
+  'xiaomi',
+  'mochila-negra',
+  'mochila-gris',
+  'mochila-azul',
+  'champinon',
+  'alaska',
+  'titi',
+};
+
 
 String formatCop(int value) {
   final digits = value.toString();
