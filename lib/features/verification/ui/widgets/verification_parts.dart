@@ -27,8 +27,9 @@ class PostSummaryRow extends StatelessWidget {
         decoration: BoxDecoration(
           color: FdColors.primarySoft,
           borderRadius: BorderRadius.circular(FdRadius.sm),
+          image: post.image == null ? null : DecorationImage(image: post.image!, fit: BoxFit.cover),
         ),
-        child: Icon(post.icon, color: FdColors.primary),
+        child: post.image == null ? Icon(post.icon, color: FdColors.primary) : null,
       ),
       title: post.title,
       subtitle: subtitle ?? 'Publicado por ${post.author}',

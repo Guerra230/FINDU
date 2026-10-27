@@ -97,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     status: post.status,
                     feminine: post.feminine,
                     icon: post.icon,
+                    image: post.image,
                     width: 250,
                     height: 320,
                     onTap: () => Navigator.pushNamed(context, AppRoutes.postDetail, arguments: post.id),

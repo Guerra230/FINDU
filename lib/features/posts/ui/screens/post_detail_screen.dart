@@ -39,9 +39,14 @@ class PostDetailScreen extends StatelessWidget {
                   children: [
                     Container(
                       height: 320,
-                      decoration: const BoxDecoration(gradient: FdGradients.hero),
+                      decoration: BoxDecoration(
+                        gradient: post.image == null ? FdGradients.hero : null,
+                        image: post.image == null ? null : DecorationImage(image: post.image!, fit: BoxFit.cover),
+                      ),
                       alignment: Alignment.center,
-                      child: Icon(post.icon, size: 120, color: FdColors.onPrimary.withValues(alpha: 0.85)),
+                      child: post.image == null
+                          ? Icon(post.icon, size: 120, color: FdColors.onPrimary.withValues(alpha: 0.85))
+                          : null,
                     ),
                     SafeArea(
                       child: Padding(
