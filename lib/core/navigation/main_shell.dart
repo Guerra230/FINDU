@@ -12,12 +12,23 @@ class MainShell extends StatefulWidget {
 
   final int initialTab;
 
+  static void goTo(BuildContext context, int tab) {
+    final shell = context.findAncestorStateOfType<_MainShellState>();
+    if (shell != null) {
+      shell._select(tab);
+    } else {
+      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.main, (_) => false, arguments: tab);
+    }
+  }
+
   @override
   State<MainShell> createState() => _MainShellState();
 }
 
 class _MainShellState extends State<MainShell> {
   late int _index = widget.initialTab.clamp(0, _tabs.length - 1).toInt();
+
+  void _select(int index) => setState(() => _index = index);
 
   static const _tabs = <Widget>[
     HomeScreen(),
@@ -42,7 +53,7 @@ class _MainShellState extends State<MainShell> {
       bottomNavigationBar: FdBottomNav(
         items: _items,
         currentIndex: _index,
-        onTap: (index) => setState(() => _index = index),
+        onTap: _select,
         onCenterTap: () => Navigator.pushNamed(context, AppRoutes.publishObject),
       ),
     );
