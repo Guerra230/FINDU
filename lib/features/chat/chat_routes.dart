@@ -1,11 +1,14 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:findu/core/navigation/app_routes.dart';
-import 'package:findu/core/navigation/placeholder_screen.dart';
+import 'package:findu/features/chat/ui/screens/chat_screen.dart';
+import 'package:findu/features/chat/ui/screens/delivery_problem_screen.dart';
+import 'package:findu/features/chat/ui/screens/delivery_verified_screen.dart';
+import 'package:findu/features/chat/ui/screens/problem_sent_screen.dart';
 
 final Map<String, WidgetBuilder> chatRoutes = {
-  AppRoutes.chat: (_) => const PlaceholderScreen(figma: '26 · S1', title: 'Chat'),
-  AppRoutes.deliveryProblem: (_) => const PlaceholderScreen(figma: '27', title: 'Reportar problema'),
-  AppRoutes.problemSent: (_) => const PlaceholderScreen(figma: '28', title: 'Reporte enviado'),
-  AppRoutes.deliveryVerified: (_) => const PlaceholderScreen(figma: '29', title: 'Entrega verificada'),
+  AppRoutes.chat: (_) => const ChatScreen(),
+  AppRoutes.deliveryProblem: (_) => const DeliveryProblemScreen(),
+  AppRoutes.problemSent: (_) => const ProblemSentScreen(),
+  AppRoutes.deliveryVerified: (_) => const DeliveryVerifiedScreen(),
 };
