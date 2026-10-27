@@ -97,6 +97,7 @@ abstract final class DemoData {
     DemoPost(id: 'parlante', title: 'Parlante', kind: PostKind.object, intent: PostIntent.lost, category: 'Parlante', place: 'Pance, Cali', ago: 'hace 1 h', author: 'Luis F.'),
     DemoPost(id: 'alaska', title: 'Alaska', kind: PostKind.pet, intent: PostIntent.found, category: 'Perro', place: 'Ciudad Pacífica', ago: 'hace 9 h', author: 'Camila V.', questions: ['¿Qué color tiene su collar?', '¿Qué dice su placa?', '¿Tiene alguna marca en el pelaje?']),
     DemoPost(id: 'titi', title: 'Titi', kind: PostKind.pet, intent: PostIntent.lost, category: 'Perro', place: 'Granada, Cali', ago: 'hace 30 min', author: 'Luis F.'),
+    DemoPost(id: 'mochila-negra', title: 'Mochila negra', kind: PostKind.object, intent: PostIntent.lost, category: 'Mochila', place: 'Central, Icesi', ago: 'hace 2 h', author: 'Daniela Melo'),
     DemoPost(id: 'canelita', title: 'Canelita', kind: PostKind.pet, intent: PostIntent.found, category: 'Perro', place: 'Caney, Cali', ago: 'hace 1 h', author: 'Daniela Melo', questions: ['¿Qué color tiene su collar?', '¿Responde a algún apodo?', '¿Tiene alguna cicatriz o mancha?']),
   ];
 
