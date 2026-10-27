@@ -1,9 +1,10 @@
 import 'package:flutter/widgets.dart';
 
 import 'package:findu/core/navigation/app_routes.dart';
-import 'package:findu/core/navigation/placeholder_screen.dart';
+import 'package:findu/features/notifications/ui/screens/alert_settings_screen.dart';
+import 'package:findu/features/notifications/ui/screens/notifications_screen.dart';
 
 final Map<String, WidgetBuilder> notificationsRoutes = {
-  AppRoutes.notifications: (_) => const PlaceholderScreen(figma: '11', title: 'Notificaciones'),
-  AppRoutes.alertSettings: (_) => const PlaceholderScreen(figma: '12', title: 'Configurar alertas'),
+  AppRoutes.notifications: (_) => const NotificationsScreen(),
+  AppRoutes.alertSettings: (_) => const AlertSettingsScreen(),
 };
