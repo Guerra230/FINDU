@@ -13,7 +13,7 @@ Proyecto final de **Aplicaciones Móviles** · Universidad Icesi · 2026-2. Lo d
 ## Enlaces
 
 - Diseño y prototipo (página **App corregida**, flujo **FINDU Liquid Glass**): https://www.figma.com/design/FAhwhJ4rkuyxYau3C3WYDR
-- Flujo de la app y modelo de datos: página **Flujo** del mismo archivo
+- Flujo de la app y modelo de datos: página **Flujo** del mismo archivo, y en el repo [docs/modelo-de-datos.md](docs/modelo-de-datos.md)
 
 ## Entregas
 
@@ -52,6 +52,7 @@ docs/                   design system, plan del sprint, flujo de Git y prompt pa
 
 ## Documentos
 
+- [**Modelo de datos**](docs/modelo-de-datos.md)
 - [Design system](docs/design-system.md)
 - [Sprint 1: plan y pantallas](docs/sprint-1/plan.md)
 - [Cómo trabajo con Git](docs/flujo-git.md)
