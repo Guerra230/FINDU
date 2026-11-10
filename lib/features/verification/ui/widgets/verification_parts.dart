@@ -1,38 +1,40 @@
 import 'package:flutter/material.dart';
 
-import 'package:findu/core/demo/demo_data.dart';
-import 'package:findu/core/demo/demo_visuals.dart';
 import 'package:findu/core/design_system/design_system.dart';
+import 'package:findu/core/models/post.dart';
+import 'package:findu/features/posts/ui/widgets/post_loader.dart';
+import 'package:findu/features/verification/domain/verification_repository.dart';
 
-class VerificationArgs {
-  const VerificationArgs({required this.postId, required this.index});
+class VerificationOutcome {
+  const VerificationOutcome({
+    required this.post,
+    required this.result,
+    required this.questions,
+  });
 
-  final String postId;
-  final int index;
+  final Post post;
+  final VerificationResult result;
+  final List<VerificationQuestion> questions;
 }
 
 class PostSummaryRow extends StatelessWidget {
-  const PostSummaryRow({super.key, required this.post, this.trailing, this.subtitle});
+  const PostSummaryRow({
+    super.key,
+    required this.post,
+    this.trailing,
+    this.subtitle,
+  });
 
-  final DemoPost post;
+  final Post post;
   final Widget? trailing;
   final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
     return FdListRow(
-      leading: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: FdColors.primarySoft,
-          borderRadius: BorderRadius.circular(FdRadius.sm),
-          image: post.image == null ? null : DecorationImage(image: post.image!, fit: BoxFit.cover),
-        ),
-        child: post.image == null ? Icon(post.icon, color: FdColors.primary) : null,
-      ),
+      leading: PostThumb(post: post),
       title: post.title,
-      subtitle: subtitle ?? 'Publicado por ${post.author}',
+      subtitle: subtitle ?? 'Publicado por ${post.authorName}',
       trailing: trailing,
     );
   }
@@ -64,8 +66,16 @@ class ResultBody extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
-            child: SafeArea(top: false, child: Column(mainAxisSize: MainAxisSize.min, children: actions)),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
+            child: SafeArea(
+              top: false,
+              child: Column(mainAxisSize: MainAxisSize.min, children: actions),
+            ),
           ),
         ],
       ),

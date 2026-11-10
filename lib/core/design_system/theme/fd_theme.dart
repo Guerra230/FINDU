@@ -29,11 +29,17 @@ abstract final class FdTheme {
         bodyColor: FdColors.textPrimary,
         displayColor: FdColors.textPrimary,
       ),
-      dividerTheme: const DividerThemeData(color: FdColors.border, thickness: 1, space: 1),
+      dividerTheme: const DividerThemeData(
+        color: FdColors.border,
+        thickness: 1,
+        space: 1,
+      ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.all(FdColors.onPrimary),
         trackColor: WidgetStateProperty.resolveWith(
-          (states) => states.contains(WidgetState.selected) ? FdColors.primary : FdColors.border,
+          (states) => states.contains(WidgetState.selected)
+              ? FdColors.primary
+              : FdColors.border,
         ),
         trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
@@ -41,7 +47,9 @@ abstract final class FdTheme {
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(FdRadius.sheet)),
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(FdRadius.sheet),
+          ),
         ),
       ),
       snackBarTheme: const SnackBarThemeData(

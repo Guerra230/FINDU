@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
+import 'package:findu/features/auth/domain/auth_models.dart';
 import 'package:findu/features/auth/ui/widgets/auth_layout.dart';
 
 class RegisterStudentScreen extends StatefulWidget {
@@ -31,19 +32,31 @@ class _RegisterStudentScreenState extends State<RegisterStudentScreen> {
   String? get _emailError {
     final email = _email.text.trim();
     if (email.isEmpty) return 'Escribe tu correo institucional';
-    if (!email.contains('@') || !email.contains('.edu')) return 'Usa el correo de tu universidad';
+    if (!email.contains('@') || !email.contains('.edu')) {
+      return 'Usa el correo de tu universidad';
+    }
     return null;
   }
 
   void _submit() {
     setState(() => _submitted = true);
-    final valid = _name.text.trim().isNotEmpty &&
+    final valid =
+        _name.text.trim().isNotEmpty &&
         _emailError == null &&
         _code.text.trim().isNotEmpty &&
         _password.text.length >= 8 &&
         _terms;
     if (!valid) return;
-    Navigator.pushNamed(context, AppRoutes.chooseUniversity);
+    Navigator.pushNamed(
+      context,
+      AppRoutes.chooseUniversity,
+      arguments: StudentDraft(
+        name: _name.text,
+        email: _email.text,
+        code: _code.text,
+        password: _password.text,
+      ),
+    );
   }
 
   @override
@@ -64,12 +77,20 @@ class _RegisterStudentScreenState extends State<RegisterStudentScreen> {
       children: [
         Text('Crea tu cuenta', style: FdTypography.display),
         const SizedBox(height: FdSpacing.xs),
-        Text('Objetos y mascotas perdidas en tu universidad', style: FdTypography.caption),
+        Text(
+          'Objetos y mascotas perdidas en tu universidad',
+          style: FdTypography.caption,
+        ),
         const SizedBox(height: FdSpacing.lg),
         AccountTypeSwitch(
           isStudent: true,
           onChanged: (student) {
-            if (!student) Navigator.pushReplacementNamed(context, AppRoutes.registerCitizen);
+            if (!student) {
+              Navigator.pushReplacementNamed(
+                context,
+                AppRoutes.registerCitizen,
+              );
+            }
           },
         ),
         const SizedBox(height: FdSpacing.lg),
@@ -77,7 +98,9 @@ class _RegisterStudentScreenState extends State<RegisterStudentScreen> {
           label: 'Nombre completo',
           controller: _name,
           textInputAction: TextInputAction.next,
-          errorText: _submitted && _name.text.trim().isEmpty ? 'Escribe tu nombre' : null,
+          errorText: _submitted && _name.text.trim().isEmpty
+              ? 'Escribe tu nombre'
+              : null,
         ),
         const SizedBox(height: FdSpacing.sm),
         FdTextField(
@@ -94,19 +117,26 @@ class _RegisterStudentScreenState extends State<RegisterStudentScreen> {
           controller: _code,
           keyboardType: TextInputType.number,
           textInputAction: TextInputAction.next,
-          errorText: _submitted && _code.text.trim().isEmpty ? 'Escribe tu código' : null,
+          errorText: _submitted && _code.text.trim().isEmpty
+              ? 'Escribe tu código'
+              : null,
         ),
         const SizedBox(height: FdSpacing.sm),
         FdTextField(
           label: 'Contraseña',
           controller: _password,
           isPassword: true,
-          errorText: _submitted && _password.text.length < 8 ? 'Mínimo 8 caracteres' : null,
+          errorText: _submitted && _password.text.length < 8
+              ? 'Mínimo 8 caracteres'
+              : null,
         ),
         const SizedBox(height: FdSpacing.sm),
         TermsCheck(value: _terms, onChanged: (v) => setState(() => _terms = v)),
         if (_submitted && !_terms)
-          Text('Debes aceptar los términos', style: FdTypography.caption.copyWith(color: FdColors.lost)),
+          Text(
+            'Debes aceptar los términos',
+            style: FdTypography.caption.copyWith(color: FdColors.lost),
+          ),
       ],
     );
   }

@@ -29,11 +29,17 @@ class FdGlass extends StatelessWidget {
   Widget build(BuildContext context) {
     final shape = BorderRadius.circular(radius);
     return DecoratedBox(
-      decoration: BoxDecoration(borderRadius: shape, boxShadow: FdEffects.softShadow),
+      decoration: BoxDecoration(
+        borderRadius: shape,
+        boxShadow: FdEffects.softShadow,
+      ),
       child: ClipRRect(
         borderRadius: shape,
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: FdEffects.glassBlur, sigmaY: FdEffects.glassBlur),
+          filter: ImageFilter.blur(
+            sigmaX: FdEffects.glassBlur,
+            sigmaY: FdEffects.glassBlur,
+          ),
           child: Material(
             color: selected
                 ? FdColors.primarySoft

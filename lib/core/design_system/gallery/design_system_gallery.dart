@@ -35,7 +35,12 @@ class _DesignSystemGalleryState extends State<DesignSystemGallery> {
           const FdScreenHeader(title: 'Design system'),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.xxl),
+              padding: const EdgeInsets.fromLTRB(
+                FdSpacing.screen,
+                0,
+                FdSpacing.screen,
+                FdSpacing.xxl,
+              ),
               children: [
                 const _Section('Findi'),
                 Wrap(
@@ -70,7 +75,9 @@ class _DesignSystemGalleryState extends State<DesignSystemGallery> {
                         child: Text(
                           entry.key,
                           style: FdTypography.label.copyWith(
-                            color: entry.value.computeLuminance() > 0.5 ? FdColors.textPrimary : FdColors.onPrimary,
+                            color: entry.value.computeLuminance() > 0.5
+                                ? FdColors.textPrimary
+                                : FdColors.onPrimary,
                           ),
                         ),
                       ),
@@ -81,48 +88,93 @@ class _DesignSystemGalleryState extends State<DesignSystemGallery> {
                 Text('¡Recibiste a Luna!', style: FdTypography.h1),
                 Text('Publicar objeto', style: FdTypography.title),
                 Text('Recientes', style: FdTypography.h2),
-                Text('Laura Gómez aprobó tus 3 respuestas.', style: FdTypography.body),
+                Text(
+                  'Laura Gómez aprobó tus 3 respuestas.',
+                  style: FdTypography.body,
+                ),
                 Text('Ciudad Pacífica, hace 1 h', style: FdTypography.caption),
                 Text('ENTREGA VERIFICADA', style: FdTypography.overline),
                 const _Section('Botones'),
                 FdButton(label: 'Publicar', onPressed: () {}),
                 const SizedBox(height: FdSpacing.sm),
-                FdButton(label: 'Ver mis comunidades', variant: FdButtonVariant.secondary, onPressed: () {}),
+                FdButton(
+                  label: 'Ver mis comunidades',
+                  variant: FdButtonVariant.secondary,
+                  onPressed: () {},
+                ),
                 const SizedBox(height: FdSpacing.sm),
-                FdButton(label: 'Hubo un problema', variant: FdButtonVariant.danger, onPressed: () {}),
-                FdButton(label: 'Volver al inicio', variant: FdButtonVariant.ghost, onPressed: () {}),
+                FdButton(
+                  label: 'Hubo un problema',
+                  variant: FdButtonVariant.danger,
+                  onPressed: () {},
+                ),
+                FdButton(
+                  label: 'Volver al inicio',
+                  variant: FdButtonVariant.ghost,
+                  onPressed: () {},
+                ),
                 const SizedBox(height: FdSpacing.sm),
                 Row(
                   children: [
-                    FdIconButton(icon: Icons.chevron_left_rounded, onPressed: () {}),
+                    FdIconButton(
+                      icon: Icons.chevron_left_rounded,
+                      onPressed: () {},
+                    ),
                     const SizedBox(width: FdSpacing.sm),
-                    FdIconButton(icon: Icons.notifications_none_rounded, badgeCount: 3, onPressed: () {}),
+                    FdIconButton(
+                      icon: Icons.notifications_none_rounded,
+                      badgeCount: 3,
+                      onPressed: () {},
+                    ),
                     const SizedBox(width: FdSpacing.sm),
-                    FdIconButton(icon: Icons.tune_rounded, filled: true, onPressed: () {}),
+                    FdIconButton(
+                      icon: Icons.tune_rounded,
+                      filled: true,
+                      onPressed: () {},
+                    ),
                   ],
                 ),
                 const _Section('Campos y selectores'),
-                const FdTextField(label: 'Correo institucional o celular', hint: 'tu@universidad.edu.co'),
+                const FdTextField(
+                  label: 'Correo institucional o celular',
+                  hint: 'tu@universidad.edu.co',
+                ),
                 const SizedBox(height: FdSpacing.sm),
                 const FdTextField(label: 'Contraseña', isPassword: true),
                 const SizedBox(height: FdSpacing.md),
                 FdSegmented<String>(
-                  options: const {'perdi': 'Lo perdí', 'encontre': 'Lo encontré'},
+                  options: const {
+                    'perdi': 'Lo perdí',
+                    'encontre': 'Lo encontré',
+                  },
                   selected: _intent,
                   onChanged: (v) => setState(() => _intent = v),
                 ),
                 const SizedBox(height: FdSpacing.md),
                 FdChipBar<String>(
                   padding: EdgeInsets.zero,
-                  options: const {'todo': 'Todo', 'objetos': 'Objetos', 'mascotas': 'Mascotas', 'celular': 'Celular'},
+                  options: const {
+                    'todo': 'Todo',
+                    'objetos': 'Objetos',
+                    'mascotas': 'Mascotas',
+                    'celular': 'Celular',
+                  },
                   selected: _chip,
                   onChanged: (v) => setState(() => _chip = v),
                 ),
                 const SizedBox(height: FdSpacing.md),
                 FdOptionCards<String>(
                   options: const [
-                    FdOption(value: 'codigo', title: 'Código de acceso', subtitle: 'Te lo comparte el administrador'),
-                    FdOption(value: 'aprobacion', title: 'Solicitar aprobación al admin', subtitle: 'El admin revisa tu solicitud'),
+                    FdOption(
+                      value: 'codigo',
+                      title: 'Código de acceso',
+                      subtitle: 'Te lo comparte el administrador',
+                    ),
+                    FdOption(
+                      value: 'aprobacion',
+                      title: 'Solicitar aprobación al admin',
+                      subtitle: 'El admin revisa tu solicitud',
+                    ),
                   ],
                   selected: _option,
                   onChanged: (v) => setState(() => _option = v),
@@ -141,14 +193,18 @@ class _DesignSystemGalleryState extends State<DesignSystemGallery> {
                   spacing: FdSpacing.xs,
                   runSpacing: FdSpacing.xs,
                   children: [
-                    for (final status in FdStatus.values) FdBadge.status(status),
+                    for (final status in FdStatus.values)
+                      FdBadge.status(status),
                     const FdTag(label: 'Asustado'),
                   ],
                 ),
                 const SizedBox(height: FdSpacing.md),
                 const FdSteps(current: 2),
                 const SizedBox(height: FdSpacing.md),
-                const FdInfoNote(message: 'Toda comunidad tiene un administrador. Entras con un código o cuando el admin te acepta.'),
+                const FdInfoNote(
+                  message:
+                      'Toda comunidad tiene un administrador. Entras con un código o cuando el admin te acepta.',
+                ),
                 const SizedBox(height: FdSpacing.md),
                 FdListRow(
                   leading: const FdAvatar(name: 'Laura Gómez'),
@@ -185,7 +241,11 @@ class _DesignSystemGalleryState extends State<DesignSystemGallery> {
                 const _Section('Encabezado de resultado y hoja'),
                 const ClipRRect(
                   borderRadius: BorderRadius.all(Radius.circular(FdRadius.lg)),
-                  child: FdResultHero(mood: FdMood.feliz, tag: 'Entrega verificada', height: 240),
+                  child: FdResultHero(
+                    mood: FdMood.feliz,
+                    tag: 'Entrega verificada',
+                    height: 240,
+                  ),
                 ),
                 const SizedBox(height: FdSpacing.md),
                 FdButton(
@@ -195,7 +255,8 @@ class _DesignSystemGalleryState extends State<DesignSystemGallery> {
                     context,
                     builder: (context) => FdSheetContent(
                       title: '¿Cómo salió la entrega?',
-                      message: 'Ambos deben confirmar. Cuando los dos confirman, la recompensa se libera.',
+                      message:
+                          'Ambos deben confirmar. Cuando los dos confirman, la recompensa se libera.',
                       note: 'Laura Gómez ya confirmó que recibió a Luna',
                       primaryLabel: 'Sí, la entrega se hizo',
                       onPrimary: () => Navigator.pop(context),
@@ -209,7 +270,8 @@ class _DesignSystemGalleryState extends State<DesignSystemGallery> {
                 const FdEmptyState(
                   mood: FdMood.esperando,
                   title: 'Aún no tienes chats',
-                  message: 'Cuando verifiques un objeto o reportes un hallazgo, el chat aparece aquí.',
+                  message:
+                      'Cuando verifiques un objeto o reportes un hallazgo, el chat aparece aquí.',
                 ),
               ],
             ),

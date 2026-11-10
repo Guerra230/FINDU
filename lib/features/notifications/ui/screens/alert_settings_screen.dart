@@ -28,9 +28,17 @@ class _AlertSettingsScreenState extends State<AlertSettingsScreen> {
           const FdScreenHeader(title: 'Configurar alertas'),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(FdSpacing.screen, FdSpacing.xs, FdSpacing.screen, FdSpacing.lg),
+              padding: const EdgeInsets.fromLTRB(
+                FdSpacing.screen,
+                FdSpacing.xs,
+                FdSpacing.screen,
+                FdSpacing.lg,
+              ),
               children: [
-                Text('Elige qué avisos quieres recibir', style: FdTypography.caption),
+                Text(
+                  'Elige qué avisos quieres recibir',
+                  style: FdTypography.caption,
+                ),
                 const SizedBox(height: FdSpacing.sm),
                 FdGlass(
                   strong: true,
@@ -41,7 +49,8 @@ class _AlertSettingsScreenState extends State<AlertSettingsScreen> {
                         FdToggleRow(
                           label: entry.key,
                           value: entry.value,
-                          onChanged: (v) => setState(() => _values[entry.key] = v),
+                          onChanged: (v) =>
+                              setState(() => _values[entry.key] = v),
                         ),
                     ],
                   ),
@@ -53,29 +62,45 @@ class _AlertSettingsScreenState extends State<AlertSettingsScreen> {
                   spacing: FdSpacing.xs,
                   children: [
                     for (final km in const [1, 3, 5])
-                      FdChip(label: '$km km', selected: _radius == km, onTap: () => setState(() => _radius = km)),
+                      FdChip(
+                        label: '$km km',
+                        selected: _radius == km,
+                        onTap: () => setState(() => _radius = km),
+                      ),
                   ],
                 ),
                 const SizedBox(height: FdSpacing.lg),
                 FdListRow(
-                  leading: const Icon(Icons.location_on_outlined, color: FdColors.primary),
+                  leading: const Icon(
+                    Icons.location_on_outlined,
+                    color: FdColors.primary,
+                  ),
                   title: 'Valle del Lili, Cali',
                   subtitle: 'Ubicación base',
                   onTap: () => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('En el Sprint 2 se toma tu ubicación real')),
+                    const SnackBar(
+                      content: Text('En el Sprint 2 se toma tu ubicación real'),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
             child: FdButton(
               label: 'Guardar',
               onPressed: () {
                 final messenger = ScaffoldMessenger.of(context);
                 Navigator.pop(context);
-                messenger.showSnackBar(const SnackBar(content: Text('Alertas guardadas')));
+                messenger.showSnackBar(
+                  const SnackBar(content: Text('Alertas guardadas')),
+                );
               },
             ),
           ),

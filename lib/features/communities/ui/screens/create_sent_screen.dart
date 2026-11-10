@@ -25,18 +25,29 @@ class CreateSentScreen extends StatelessWidget {
                 const SizedBox(height: FdSpacing.xs),
                 Text(
                   'El equipo FINDU revisará la evidencia de $name. Te avisaremos en máximo 48 h.',
-                  style: FdTypography.body.copyWith(color: FdColors.textSecondary),
+                  style: FdTypography.body.copyWith(
+                    color: FdColors.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: FdSpacing.lg),
                 const StatusTimeline(
-                  steps: ['Solicitud enviada', 'En revisión', 'Comunidad activa y tú como admin'],
+                  steps: [
+                    'Solicitud enviada',
+                    'En revisión',
+                    'Comunidad activa y tú como admin',
+                  ],
                   current: 1,
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
             child: SafeArea(
               top: false,
               child: Column(
@@ -50,7 +61,11 @@ class CreateSentScreen extends StatelessWidget {
                   const SizedBox(height: FdSpacing.sm),
                   FdButton(
                     label: 'Volver al inicio',
-                    onPressed: () => Navigator.pushNamedAndRemoveUntil(context, AppRoutes.main, (_) => false),
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRoutes.main,
+                      (_) => false,
+                    ),
                   ),
                 ],
               ),

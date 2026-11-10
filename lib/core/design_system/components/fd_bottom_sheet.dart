@@ -10,7 +10,10 @@ import 'package:findu/core/design_system/tokens/fd_radius.dart';
 import 'package:findu/core/design_system/tokens/fd_spacing.dart';
 import 'package:findu/core/design_system/tokens/fd_typography.dart';
 
-Future<T?> showFdBottomSheet<T>(BuildContext context, {required WidgetBuilder builder}) {
+Future<T?> showFdBottomSheet<T>(
+  BuildContext context, {
+  required WidgetBuilder builder,
+}) {
   return showModalBottomSheet<T>(
     context: context,
     isScrollControlled: true,
@@ -18,9 +21,14 @@ Future<T?> showFdBottomSheet<T>(BuildContext context, {required WidgetBuilder bu
     backgroundColor: Colors.transparent,
     barrierColor: Colors.black.withValues(alpha: 0.35),
     builder: (context) => ClipRRect(
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(FdRadius.sheet)),
+      borderRadius: const BorderRadius.vertical(
+        top: Radius.circular(FdRadius.sheet),
+      ),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: FdEffects.glassBlur, sigmaY: FdEffects.glassBlur),
+        filter: ImageFilter.blur(
+          sigmaX: FdEffects.glassBlur,
+          sigmaY: FdEffects.glassBlur,
+        ),
         child: Container(
           color: FdColors.glassStrong,
           padding: EdgeInsets.fromLTRB(
@@ -39,7 +47,10 @@ Future<T?> showFdBottomSheet<T>(BuildContext context, {required WidgetBuilder bu
                   child: Container(
                     width: 40,
                     height: 5,
-                    decoration: BoxDecoration(color: FdColors.border, borderRadius: BorderRadius.circular(3)),
+                    decoration: BoxDecoration(
+                      color: FdColors.border,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
                   ),
                 ),
                 const SizedBox(height: FdSpacing.md),
@@ -92,7 +103,10 @@ class FdSheetContent extends StatelessWidget {
         Text(title, style: FdTypography.h1),
         if (message != null) ...[
           const SizedBox(height: FdSpacing.xs),
-          Text(message!, style: FdTypography.body.copyWith(color: FdColors.textSecondary)),
+          Text(
+            message!,
+            style: FdTypography.body.copyWith(color: FdColors.textSecondary),
+          ),
         ],
         if (note != null) ...[
           const SizedBox(height: FdSpacing.md),
@@ -102,7 +116,10 @@ class FdSheetContent extends StatelessWidget {
               color: FdColors.primarySoft,
               borderRadius: BorderRadius.circular(FdRadius.sm),
             ),
-            child: Text(note!, style: FdTypography.caption.copyWith(color: FdColors.primaryDark)),
+            child: Text(
+              note!,
+              style: FdTypography.caption.copyWith(color: FdColors.primaryDark),
+            ),
           ),
         ],
         const SizedBox(height: FdSpacing.lg),
@@ -112,7 +129,9 @@ class FdSheetContent extends StatelessWidget {
           FdButton(
             label: secondaryLabel!,
             onPressed: onSecondary,
-            variant: secondaryIsDanger ? FdButtonVariant.danger : FdButtonVariant.secondary,
+            variant: secondaryIsDanger
+                ? FdButtonVariant.danger
+                : FdButtonVariant.secondary,
           ),
         ],
         if (cancelLabel != null)

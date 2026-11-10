@@ -2,19 +2,38 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
+import 'package:findu/features/auth/ui/bloc/recovery_cubit.dart';
 import 'package:findu/features/auth/ui/widgets/auth_layout.dart';
+import 'package:findu/features/auth/ui/widgets/recovery_scope.dart';
 
-class RecoveryCodeScreen extends StatefulWidget {
+class RecoveryCodeScreen extends StatelessWidget {
   const RecoveryCodeScreen({super.key});
 
   @override
-  State<RecoveryCodeScreen> createState() => _RecoveryCodeScreenState();
+  Widget build(BuildContext context) {
+    return RecoveryScope(
+      onDone: (context, state) {
+        if (state.email != null) {
+          Navigator.pushNamed(context, AppRoutes.newPassword);
+        }
+      },
+      child: const _RecoveryCodeView(),
+    );
+  }
 }
 
-class _RecoveryCodeScreenState extends State<RecoveryCodeScreen> {
+class _RecoveryCodeView extends StatefulWidget {
+  const _RecoveryCodeView();
+
+  @override
+  State<_RecoveryCodeView> createState() => _RecoveryCodeViewState();
+}
+
+class _RecoveryCodeViewState extends State<_RecoveryCodeView> {
   static const _length = 6;
   final _controllers = List.generate(_length, (_) => TextEditingController());
   final _nodes = List.generate(_length, (_) => FocusNode());
@@ -54,7 +73,9 @@ class _RecoveryCodeScreenState extends State<RecoveryCodeScreen> {
   bool get _complete => _controllers.every((c) => c.text.isNotEmpty);
 
   void _onChanged(int index, String value) {
-    if (value.isNotEmpty && index < _length - 1) _nodes[index + 1].requestFocus();
+    if (value.isNotEmpty && index < _length - 1) {
+      _nodes[index + 1].requestFocus();
+    }
     if (value.isEmpty && index > 0) _nodes[index - 1].requestFocus();
     setState(() {});
   }
@@ -64,9 +85,17 @@ class _RecoveryCodeScreenState extends State<RecoveryCodeScreen> {
     final target = ModalRoute.of(context)?.settings.arguments;
     return AuthLayout(
       headerTitle: 'Recuperar contraseña',
-      bottom: FdButton(
-        label: 'Verificar',
-        onPressed: _complete ? () => Navigator.pushNamed(context, AppRoutes.newPassword) : null,
+      bottom: BlocBuilder<RecoveryCubit, RecoveryState>(
+        builder: (context, state) => FdButton(
+          label: 'Verificar',
+          isLoading: state.status == RecoveryStatus.loading,
+          onPressed: _complete && target is String
+              ? () => context.read<RecoveryCubit>().verifyCode(
+                  email: target,
+                  code: _controllers.map((c) => c.text).join(),
+                )
+              : null,
+        ),
       ),
       children: [
         Text('Revisa tu correo o celular', style: FdTypography.h1),
@@ -102,7 +131,10 @@ class _RecoveryCodeScreenState extends State<RecoveryCodeScreen> {
                         ],
                         style: FdTypography.h1,
                         cursorColor: FdColors.primary,
-                        decoration: const InputDecoration(border: InputBorder.none, isDense: true),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          isDense: true,
+                        ),
                         onChanged: (v) => _onChanged(i, v),
                         onTap: () => setState(() {}),
                       ),
@@ -120,16 +152,28 @@ class _RecoveryCodeScreenState extends State<RecoveryCodeScreen> {
           child: _seconds > 0
               ? Text(
                   'Reenviar código en 0:${_seconds.toString().padLeft(2, '0')}',
-                  style: FdTypography.bodyStrong.copyWith(color: FdColors.textSecondary),
+                  style: FdTypography.bodyStrong.copyWith(
+                    color: FdColors.textSecondary,
+                  ),
                 )
               : TextButton(
                   onPressed: () {
                     setState(_startTimer);
+                    if (target is String) {
+                      context.read<RecoveryCubit>().sendCode(target);
+                    }
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Te enviamos un código nuevo')),
+                      const SnackBar(
+                        content: Text('Te enviamos un código nuevo'),
+                      ),
                     );
                   },
-                  child: Text('Reenviar código', style: FdTypography.bodyStrong.copyWith(color: FdColors.primary)),
+                  child: Text(
+                    'Reenviar código',
+                    style: FdTypography.bodyStrong.copyWith(
+                      color: FdColors.primary,
+                    ),
+                  ),
                 ),
         ),
       ],

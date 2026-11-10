@@ -27,16 +27,14 @@ Proyecto final de **Aplicaciones Móviles** · Universidad Icesi · 2026-2. Lo d
 ## Cómo correrlo
 
 ```bash
-git clone https://github.com/<tu-usuario>/findu.git
-cd findu
-flutter create . --org co.edu.icesi --project-name findu --platforms=android,ios
+git clone https://github.com/Guerra230/FINDU.git
+cd FINDU
 flutter pub get
-flutter run
+cp env.example.json env.json
+flutter run --dart-define-from-file=env.json
 ```
 
-`flutter create .` solo se corre la primera vez: crea las carpetas de Android e iOS y no toca `lib/`.
-
-Al abrir la app, cualquier pantalla en construcción tiene el botón **Ver todas las pantallas**, que lleva al índice de pantallas y a la galería del design system.
+Antes hay que crear el proyecto de Supabase y llenar `env.json` con la URL y la anon key. Los pasos están en [docs/supabase.md](docs/supabase.md).
 
 ## Estructura
 
@@ -44,15 +42,19 @@ Al abrir la app, cualquier pantalla en construcción tiene el botón **Ver todas
 lib/
   core/design_system/   tokens, tema, componentes Fd y Findi (ver docs/design-system.md)
   core/navigation/      rutas, barra inferior y pantallas temporales
-  core/demo/            datos de ejemplo del Sprint 1
+  core/demo/            datos de ejemplo de comunidades e impulsos
+  core/models/          modelo Post compartido entre features
+  core/supabase/        inicialización del cliente
   core/dev/             índice de pantallas para desarrollo
-  features/<feature>/   una carpeta por parte de la app (auth, publish, chat...)
+  features/<feature>/   domain, data y ui (bloc, screens, widgets) por cada parte de la app
+supabase/migrations/    esquema SQL, RLS, funciones y datos iniciales
 docs/                   design system, plan del sprint, flujo de Git y prompt para IA
 ```
 
 ## Documentos
 
 - [**Modelo de datos**](docs/modelo-de-datos.md)
+- [**Supabase: configuración**](docs/supabase.md)
 - [Design system](docs/design-system.md)
 - [Sprint 1: plan y pantallas](docs/sprint-1/plan.md)
 - [Cómo trabajo con Git](docs/flujo-git.md)

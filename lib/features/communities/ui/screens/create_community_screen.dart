@@ -16,7 +16,13 @@ class _CreateCommunityScreenState extends State<CreateCommunityScreen> {
   String? _type;
   bool _evidence = false;
 
-  static const _types = ['Educativa', 'Residencial', 'Corporativa', 'Pública', 'Evento temporal'];
+  static const _types = [
+    'Educativa',
+    'Residencial',
+    'Corporativa',
+    'Pública',
+    'Evento temporal',
+  ];
 
   @override
   void dispose() {
@@ -25,7 +31,11 @@ class _CreateCommunityScreenState extends State<CreateCommunityScreen> {
     super.dispose();
   }
 
-  bool get _valid => _name.text.trim().isNotEmpty && _type != null && _address.text.trim().isNotEmpty && _evidence;
+  bool get _valid =>
+      _name.text.trim().isNotEmpty &&
+      _type != null &&
+      _address.text.trim().isNotEmpty &&
+      _evidence;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +45,12 @@ class _CreateCommunityScreenState extends State<CreateCommunityScreen> {
           const FdScreenHeader(title: 'Crear comunidad'),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(FdSpacing.screen, FdSpacing.xs, FdSpacing.screen, FdSpacing.lg),
+              padding: const EdgeInsets.fromLTRB(
+                FdSpacing.screen,
+                FdSpacing.xs,
+                FdSpacing.screen,
+                FdSpacing.lg,
+              ),
               children: [
                 FdTextField(
                   label: 'Nombre de la comunidad',
@@ -55,7 +70,12 @@ class _CreateCommunityScreenState extends State<CreateCommunityScreen> {
                         spacing: FdSpacing.xs,
                         runSpacing: FdSpacing.xs,
                         children: [
-                          for (final t in _types) FdChip(label: t, selected: _type == t, onTap: () => setState(() => _type = t)),
+                          for (final t in _types)
+                            FdChip(
+                              label: t,
+                              selected: _type == t,
+                              onTap: () => setState(() => _type = t),
+                            ),
                         ],
                       ),
                     ],
@@ -70,24 +90,39 @@ class _CreateCommunityScreenState extends State<CreateCommunityScreen> {
                 ),
                 const SizedBox(height: FdSpacing.md),
                 FdListRow(
-                  leading: Icon(_evidence ? Icons.check_circle_rounded : Icons.attach_file_rounded, color: FdColors.primary),
+                  leading: Icon(
+                    _evidence
+                        ? Icons.check_circle_rounded
+                        : Icons.attach_file_rounded,
+                    color: FdColors.primary,
+                  ),
                   title: _evidence ? 'Evidencia adjunta' : 'Adjunta evidencia',
                   subtitle: 'Acta, NIT o dominio del correo',
                   onTap: () => setState(() => _evidence = !_evidence),
                 ),
                 const SizedBox(height: FdSpacing.md),
                 const FdInfoNote(
-                  message: 'Tu solicitud queda pendiente hasta que el equipo FINDU la apruebe. Tú quedarás como administrador.',
+                  message:
+                      'Tu solicitud queda pendiente hasta que el equipo FINDU la apruebe. Tú quedarás como administrador.',
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
             child: FdButton(
               label: 'Enviar solicitud',
               onPressed: _valid
-                  ? () => Navigator.pushReplacementNamed(context, AppRoutes.createSent, arguments: _name.text.trim())
+                  ? () => Navigator.pushReplacementNamed(
+                      context,
+                      AppRoutes.createSent,
+                      arguments: _name.text.trim(),
+                    )
                   : null,
             ),
           ),

@@ -1,17 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
+import 'package:findu/features/auth/ui/bloc/recovery_cubit.dart';
 import 'package:findu/features/auth/ui/widgets/auth_layout.dart';
+import 'package:findu/features/auth/ui/widgets/recovery_scope.dart';
 
-class ForgotPasswordScreen extends StatefulWidget {
+class ForgotPasswordScreen extends StatelessWidget {
   const ForgotPasswordScreen({super.key});
 
   @override
-  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+  Widget build(BuildContext context) {
+    return RecoveryScope(
+      onDone: (context, state) => Navigator.pushNamed(
+        context,
+        AppRoutes.recoveryCode,
+        arguments: state.email,
+      ),
+      child: const _ForgotPasswordView(),
+    );
+  }
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+class _ForgotPasswordView extends StatefulWidget {
+  const _ForgotPasswordView();
+
+  @override
+  State<_ForgotPasswordView> createState() => _ForgotPasswordViewState();
+}
+
+class _ForgotPasswordViewState extends State<_ForgotPasswordView> {
   final _user = TextEditingController();
   bool _submitted = false;
 
@@ -24,7 +43,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   void _send() {
     setState(() => _submitted = true);
     if (_user.text.trim().isEmpty) return;
-    Navigator.pushNamed(context, AppRoutes.recoveryCode, arguments: _user.text.trim());
+    context.read<RecoveryCubit>().sendCode(_user.text);
   }
 
   @override
@@ -34,7 +53,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       bottom: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          FdButton(label: 'Enviar código', onPressed: _send),
+          BlocBuilder<RecoveryCubit, RecoveryState>(
+            builder: (context, state) => FdButton(
+              label: 'Enviar código',
+              isLoading: state.status == RecoveryStatus.loading,
+              onPressed: _send,
+            ),
+          ),
           FdButton(
             label: 'Volver a ingresar',
             variant: FdButtonVariant.ghost,
@@ -57,10 +82,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           hint: 'tu@universidad.edu.co o 300 123 4567',
           controller: _user,
           keyboardType: TextInputType.emailAddress,
-          errorText: _submitted && _user.text.trim().isEmpty ? 'Escribe tu correo o celular' : null,
+          errorText: _submitted && _user.text.trim().isEmpty
+              ? 'Escribe tu correo o celular'
+              : null,
         ),
         const SizedBox(height: FdSpacing.md),
-        const FdInfoNote(message: 'El código vence en 15 minutos y solo se puede usar una vez.'),
+        const FdInfoNote(
+          message:
+              'El código vence en 15 minutos y solo se puede usar una vez.',
+        ),
       ],
     );
   }

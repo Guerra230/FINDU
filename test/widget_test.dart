@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:findu/core/demo/demo_data.dart';
 import 'package:findu/core/navigation/app_router.dart';
 import 'package:findu/core/navigation/screen_catalog.dart';
+import 'package:findu/core/utils/formatters.dart';
 
 void main() {
   test('cada pantalla del catálogo tiene su ruta', () {
@@ -11,9 +11,10 @@ void main() {
     }
   });
 
-  test('los objetos encontrados tienen 3 preguntas', () {
-    for (final post in DemoData.posts.where((p) => p.intent == PostIntent.found)) {
-      expect(post.questions.length, 3, reason: post.title);
-    }
+  test('formatea pesos colombianos', () {
+    expect(formatCop(500000), '\$500.000');
+    expect(formatCop(5000), '\$5.000');
+    expect(parseCop('\$1.200'), 1200);
+    expect(parseCop(''), isNull);
   });
 }

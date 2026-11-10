@@ -27,11 +27,17 @@ class _JoinCommunityScreenState extends State<JoinCommunityScreen> {
 
   void _join() {
     if (_method == 'aprobacion') {
-      Navigator.pushReplacementNamed(context, AppRoutes.joinPending, arguments: _community.text.trim());
+      Navigator.pushReplacementNamed(
+        context,
+        AppRoutes.joinPending,
+        arguments: _community.text.trim(),
+      );
       return;
     }
     if (_code.text.trim().toUpperCase() != DemoData.accessCode) {
-      setState(() => _codeError = 'Código inválido o vencido. Pídeselo al admin.');
+      setState(
+        () => _codeError = 'Código inválido o vencido. Pídeselo al admin.',
+      );
       return;
     }
     showFdBottomSheet<void>(
@@ -39,7 +45,8 @@ class _JoinCommunityScreenState extends State<JoinCommunityScreen> {
       builder: (sheetContext) => FdSheetContent(
         mood: FdMood.feliz,
         title: '¡Ya eres miembro!',
-        message: 'Entraste a ${_community.text.trim()} con el código de acceso.',
+        message:
+            'Entraste a ${_community.text.trim()} con el código de acceso.',
         primaryLabel: 'Ver mis comunidades',
         onPrimary: () {
           Navigator.pop(sheetContext);
@@ -52,7 +59,9 @@ class _JoinCommunityScreenState extends State<JoinCommunityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ready = _community.text.trim().isNotEmpty && (_method == 'aprobacion' || _code.text.trim().isNotEmpty);
+    final ready =
+        _community.text.trim().isNotEmpty &&
+        (_method == 'aprobacion' || _code.text.trim().isNotEmpty);
 
     return FdScaffold(
       body: Column(
@@ -60,16 +69,34 @@ class _JoinCommunityScreenState extends State<JoinCommunityScreen> {
           const FdScreenHeader(title: 'Unirse a una comunidad'),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(FdSpacing.screen, FdSpacing.xs, FdSpacing.screen, FdSpacing.lg),
+              padding: const EdgeInsets.fromLTRB(
+                FdSpacing.screen,
+                FdSpacing.xs,
+                FdSpacing.screen,
+                FdSpacing.lg,
+              ),
               children: [
-                FdTextField(label: 'Comunidad', controller: _community, onChanged: (_) => setState(() {})),
+                FdTextField(
+                  label: 'Comunidad',
+                  controller: _community,
+                  onChanged: (_) => setState(() {}),
+                ),
                 const SizedBox(height: FdSpacing.lg),
                 Text('Elige cómo verificarte', style: FdTypography.h2),
                 const SizedBox(height: FdSpacing.sm),
                 FdOptionCards<String>(
                   options: const [
-                    FdOption(value: 'codigo', title: 'Código de acceso', subtitle: 'Te lo comparte el administrador de la comunidad'),
-                    FdOption(value: 'aprobacion', title: 'Solicitar aprobación al admin', subtitle: 'El administrador revisa y acepta tu solicitud'),
+                    FdOption(
+                      value: 'codigo',
+                      title: 'Código de acceso',
+                      subtitle:
+                          'Te lo comparte el administrador de la comunidad',
+                    ),
+                    FdOption(
+                      value: 'aprobacion',
+                      title: 'Solicitar aprobación al admin',
+                      subtitle: 'El administrador revisa y acepta tu solicitud',
+                    ),
                   ],
                   selected: _method,
                   onChanged: (v) => setState(() => _method = v),
@@ -85,13 +112,19 @@ class _JoinCommunityScreenState extends State<JoinCommunityScreen> {
                   const SizedBox(height: FdSpacing.md),
                 ],
                 const FdInfoNote(
-                  message: 'Toda comunidad tiene un administrador. Entras con un código de acceso o cuando el admin aprueba tu solicitud. Puedes estar en varias comunidades.',
+                  message:
+                      'Toda comunidad tiene un administrador. Entras con un código de acceso o cuando el admin aprueba tu solicitud. Puedes estar en varias comunidades.',
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
             child: FdButton(
               label: _method == 'codigo' ? 'Unirme' : 'Enviar solicitud',
               onPressed: ready ? _join : null,

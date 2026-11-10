@@ -45,7 +45,12 @@ class _FdTextFieldState extends State<FdTextField> {
         FdGlass(
           strong: true,
           radius: FdRadius.md,
-          padding: const EdgeInsets.fromLTRB(FdSpacing.md, FdSpacing.xs, FdSpacing.xs, FdSpacing.xxs),
+          padding: const EdgeInsets.fromLTRB(
+            FdSpacing.md,
+            FdSpacing.xs,
+            FdSpacing.xs,
+            FdSpacing.xxs,
+          ),
           child: Row(
             children: [
               Expanded(
@@ -66,8 +71,12 @@ class _FdTextFieldState extends State<FdTextField> {
                         isDense: true,
                         border: InputBorder.none,
                         hintText: widget.hint,
-                        hintStyle: FdTypography.body.copyWith(color: FdColors.textDisabled),
-                        contentPadding: const EdgeInsets.symmetric(vertical: FdSpacing.xs),
+                        hintStyle: FdTypography.body.copyWith(
+                          color: FdColors.textDisabled,
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: FdSpacing.xs,
+                        ),
                       ),
                     ),
                   ],
@@ -77,7 +86,9 @@ class _FdTextFieldState extends State<FdTextField> {
                 IconButton(
                   onPressed: () => setState(() => _obscure = !_obscure),
                   icon: Icon(
-                    _obscure ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                    _obscure
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
                     color: FdColors.primary,
                   ),
                 ),
@@ -86,8 +97,14 @@ class _FdTextFieldState extends State<FdTextField> {
         ),
         if (widget.errorText != null)
           Padding(
-            padding: const EdgeInsets.only(left: FdSpacing.md, top: FdSpacing.xxs),
-            child: Text(widget.errorText!, style: FdTypography.caption.copyWith(color: FdColors.lost)),
+            padding: const EdgeInsets.only(
+              left: FdSpacing.md,
+              top: FdSpacing.xxs,
+            ),
+            child: Text(
+              widget.errorText!,
+              style: FdTypography.caption.copyWith(color: FdColors.lost),
+            ),
           ),
       ],
     );

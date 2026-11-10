@@ -10,6 +10,11 @@ abstract final class FdEffects {
   ];
 
   static const buttonShadow = [
-    BoxShadow(color: Color(0x403AAFFE), blurRadius: 24, spreadRadius: -6, offset: Offset(0, 10)),
+    BoxShadow(
+      color: Color(0x403AAFFE),
+      blurRadius: 24,
+      spreadRadius: -6,
+      offset: Offset(0, 10),
+    ),
   ];
 }

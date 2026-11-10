@@ -29,13 +29,19 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
   Future<void> _copy() async {
     await Clipboard.setData(ClipboardData(text: _code));
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Código copiado')));
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Código copiado')));
   }
 
   void _resolve(String name, bool accepted) {
     setState(() => _requests.remove(name));
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(accepted ? '$name ya es miembro' : 'Rechazaste la solicitud de $name')),
+      SnackBar(
+        content: Text(
+          accepted ? '$name ya es miembro' : 'Rechazaste la solicitud de $name',
+        ),
+      ),
     );
   }
 
@@ -49,9 +55,17 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
           const FdScreenHeader(title: 'Panel de administración'),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(FdSpacing.screen, FdSpacing.xs, FdSpacing.screen, FdSpacing.lg),
+              padding: const EdgeInsets.fromLTRB(
+                FdSpacing.screen,
+                FdSpacing.xs,
+                FdSpacing.screen,
+                FdSpacing.lg,
+              ),
               children: [
-                Text('${community.name} · ${community.members} miembros · Eres admin', style: FdTypography.caption),
+                Text(
+                  '${community.name} · ${community.members} miembros · Eres admin',
+                  style: FdTypography.caption,
+                ),
                 const SizedBox(height: FdSpacing.md),
                 FdGlass(
                   strong: true,
@@ -60,8 +74,16 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                     children: [
                       Text('Código de acceso', style: FdTypography.bodyStrong),
                       const SizedBox(height: FdSpacing.xs),
-                      Text(_code, style: FdTypography.display.copyWith(color: FdColors.primary)),
-                      Text('$_uses de 20 usos · vence el 30 de noviembre', style: FdTypography.caption),
+                      Text(
+                        _code,
+                        style: FdTypography.display.copyWith(
+                          color: FdColors.primary,
+                        ),
+                      ),
+                      Text(
+                        '$_uses de 20 usos · vence el 30 de noviembre',
+                        style: FdTypography.caption,
+                      ),
                       const SizedBox(height: FdSpacing.md),
                       Row(
                         children: [
@@ -87,13 +109,17 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                   ),
                 ),
                 const SizedBox(height: FdSpacing.lg),
-                Text('Solicitudes pendientes (${_requests.length})', style: FdTypography.h2),
+                Text(
+                  'Solicitudes pendientes (${_requests.length})',
+                  style: FdTypography.h2,
+                ),
                 const SizedBox(height: FdSpacing.sm),
                 if (_requests.isEmpty)
                   const FdEmptyState(
                     mood: FdMood.feliz,
                     title: 'Sin solicitudes',
-                    message: 'Cuando alguien pida unirse sin código, aparecerá aquí.',
+                    message:
+                        'Cuando alguien pida unirse sin código, aparecerá aquí.',
                   )
                 else
                   for (final name in _requests)
@@ -109,10 +135,17 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                                 const SizedBox(width: FdSpacing.sm),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(name, style: FdTypography.bodyStrong),
-                                      Text('Solicitó unirse sin código', style: FdTypography.caption),
+                                      Text(
+                                        name,
+                                        style: FdTypography.bodyStrong,
+                                      ),
+                                      Text(
+                                        'Solicitó unirse sin código',
+                                        style: FdTypography.caption,
+                                      ),
                                     ],
                                   ),
                                 ),
@@ -144,7 +177,10 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
                       ),
                     ),
                 const SizedBox(height: FdSpacing.sm),
-                const FdInfoNote(message: 'Solo los administradores pueden aceptar miembros y crear códigos de acceso.'),
+                const FdInfoNote(
+                  message:
+                      'Solo los administradores pueden aceptar miembros y crear códigos de acceso.',
+                ),
               ],
             ),
           ),

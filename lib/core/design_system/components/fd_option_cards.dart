@@ -6,7 +6,12 @@ import 'package:findu/core/design_system/tokens/fd_spacing.dart';
 import 'package:findu/core/design_system/tokens/fd_typography.dart';
 
 class FdOption<T> {
-  const FdOption({required this.value, required this.title, this.subtitle, this.icon});
+  const FdOption({
+    required this.value,
+    required this.title,
+    this.subtitle,
+    this.icon,
+  });
 
   final T value;
   final String title;
@@ -50,7 +55,8 @@ class FdOptionCards<T> extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(option.title, style: FdTypography.bodyStrong),
-                        if (option.subtitle != null) Text(option.subtitle!, style: FdTypography.caption),
+                        if (option.subtitle != null)
+                          Text(option.subtitle!, style: FdTypography.caption),
                       ],
                     ),
                   ),
@@ -76,14 +82,20 @@ class _Radio extends StatelessWidget {
       height: 24,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: selected ? FdColors.primary : FdColors.textDisabled, width: 2),
+        border: Border.all(
+          color: selected ? FdColors.primary : FdColors.textDisabled,
+          width: 2,
+        ),
       ),
       alignment: Alignment.center,
       child: selected
           ? Container(
               width: 12,
               height: 12,
-              decoration: const BoxDecoration(shape: BoxShape.circle, color: FdColors.primary),
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: FdColors.primary,
+              ),
             )
           : null,
     );

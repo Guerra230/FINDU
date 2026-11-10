@@ -33,10 +33,18 @@ class FdEmptyState extends StatelessWidget {
           const SizedBox(height: FdSpacing.lg),
           Text(title, textAlign: TextAlign.center, style: FdTypography.h1),
           const SizedBox(height: FdSpacing.xs),
-          Text(message, textAlign: TextAlign.center, style: FdTypography.body.copyWith(color: FdColors.textSecondary)),
+          Text(
+            message,
+            textAlign: TextAlign.center,
+            style: FdTypography.body.copyWith(color: FdColors.textSecondary),
+          ),
           if (actionLabel != null) ...[
             const SizedBox(height: FdSpacing.lg),
-            FdButton(label: actionLabel!, onPressed: onAction, variant: FdButtonVariant.secondary),
+            FdButton(
+              label: actionLabel!,
+              onPressed: onAction,
+              variant: FdButtonVariant.secondary,
+            ),
           ],
         ],
       ),

@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:findu/core/demo/demo_data.dart';
-import 'package:findu/core/demo/demo_visuals.dart';
 import 'package:findu/core/design_system/design_system.dart';
+import 'package:findu/core/models/post.dart';
+import 'package:findu/core/utils/formatters.dart';
+import 'package:findu/features/posts/ui/widgets/post_loader.dart';
 
 class ShareReportScreen extends StatelessWidget {
   const ShareReportScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return PostLoader(
+      postId: routeId(context),
+      builder: (context, post) => _ShareView(post: post),
+    );
+  }
+}
+
+class _ShareView extends StatelessWidget {
+  const _ShareView({required this.post});
+
+  final Post post;
 
   static const _channels = <(IconData, String)>[
     (Icons.chat_outlined, 'WhatsApp'),
@@ -17,14 +32,24 @@ class ShareReportScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final post = DemoData.post(routeId(context));
-    final link = 'https://findu.app/p/${post.id}';
+    final status = post.isLost
+        ? (post.feminine ? 'Perdida' : 'Perdido')
+        : (post.feminine ? 'Encontrada' : 'Encontrado');
+    final text =
+        '$status en FINDU: ${post.title} · ${post.place}'
+        '${post.reward == null ? '' : ' · Recompensa ${formatCop(post.reward!)}'}. Código: ${post.id.substring(0, 8)}';
 
     Future<void> share(String channel) async {
-      await Clipboard.setData(ClipboardData(text: link));
+      await Clipboard.setData(ClipboardData(text: text));
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(channel == 'Copiar enlace' ? 'Enlace copiado' : 'Enlace copiado para $channel')),
+        SnackBar(
+          content: Text(
+            channel == 'Copiar enlace'
+                ? 'Texto copiado'
+                : 'Texto copiado para $channel',
+          ),
+        ),
       );
     }
 
@@ -37,19 +62,11 @@ class ShareReportScreen extends StatelessWidget {
               padding: const EdgeInsets.all(FdSpacing.screen),
               children: [
                 FdListRow(
-                  leading: Container(
-                    width: 52,
-                    height: 52,
-                    decoration: BoxDecoration(
-                      color: FdColors.primarySoft,
-                      borderRadius: BorderRadius.circular(FdRadius.sm),
-                    ),
-                    child: Icon(post.icon, color: FdColors.primary),
-                  ),
+                  leading: PostThumb(post: post, size: 52),
                   title: '${post.title} · ${post.place}',
                   subtitle: post.reward == null
-                      ? (post.status == FdStatus.lost ? 'Perdido' : 'Encontrado')
-                      : '${post.feminine ? 'Perdida' : 'Perdido'} · Recompensa ${formatCop(post.reward!)}',
+                      ? status
+                      : '$status · Recompensa ${formatCop(post.reward!)}',
                 ),
                 const SizedBox(height: FdSpacing.lg),
                 Text('¿Dónde lo compartes?', style: FdTypography.h2),
@@ -65,7 +82,11 @@ class ShareReportScreen extends StatelessWidget {
                             radius: FdRadius.md,
                             padding: const EdgeInsets.all(FdSpacing.md),
                             onTap: () => share(label),
-                            child: Icon(icon, color: FdColors.primary, size: 28),
+                            child: Icon(
+                              icon,
+                              color: FdColors.primary,
+                              size: 28,
+                            ),
                           ),
                           const SizedBox(height: FdSpacing.xs),
                           Text(label, style: FdTypography.caption),
@@ -74,13 +95,25 @@ class ShareReportScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: FdSpacing.lg),
-                FdInfoNote(message: 'El enlace abre el reporte de ${post.title}. No incluye tu número ni tu correo.'),
+                FdInfoNote(
+                  message:
+                      'El texto describe ${post.title}. No incluye tu número ni tu correo.',
+                ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
-            child: FdButton(label: 'Listo', variant: FdButtonVariant.secondary, onPressed: () => Navigator.pop(context)),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
+            child: FdButton(
+              label: 'Listo',
+              variant: FdButtonVariant.secondary,
+              onPressed: () => Navigator.pop(context),
+            ),
           ),
         ],
       ),
