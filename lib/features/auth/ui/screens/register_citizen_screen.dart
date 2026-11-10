@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
+import 'package:findu/features/auth/ui/bloc/auth_bloc.dart';
 import 'package:findu/features/auth/ui/widgets/auth_layout.dart';
 
 class RegisterCitizenScreen extends StatefulWidget {
@@ -35,65 +37,115 @@ class _RegisterCitizenScreenState extends State<RegisterCitizenScreen> {
 
   void _submit() {
     setState(() => _submitted = true);
-    final valid = _name.text.trim().isNotEmpty && _phoneError == null && _password.text.length >= 8 && _terms;
+    final valid =
+        _name.text.trim().isNotEmpty &&
+        _phoneError == null &&
+        _password.text.length >= 8 &&
+        _terms;
     if (!valid) return;
-    Navigator.pushNamedAndRemoveUntil(context, AppRoutes.main, (_) => false);
+    context.read<AuthBloc>().add(
+      AuthCitizenSignUpRequested(
+        name: _name.text,
+        phone: _phone.text,
+        password: _password.text,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AuthLayout(
-      headerTitle: 'Crear cuenta',
-      bottom: Column(
-        mainAxisSize: MainAxisSize.min,
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state.status == AuthStatus.authenticated) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.main,
+            (_) => false,
+          );
+        } else if (state.status == AuthStatus.failure && state.error != null) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(state.error!)));
+        }
+      },
+      child: AuthLayout(
+        headerTitle: 'Crear cuenta',
+        bottom: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) => FdButton(
+                label: 'Crear cuenta',
+                isLoading: state.isLoading,
+                onPressed: _submit,
+              ),
+            ),
+            AuthFooterLink(
+              question: '¿Ya tienes cuenta?',
+              action: 'Ingresar',
+              onTap: () =>
+                  Navigator.popUntil(context, (route) => route.isFirst),
+            ),
+          ],
+        ),
         children: [
-          FdButton(label: 'Crear cuenta', onPressed: _submit),
-          AuthFooterLink(
-            question: '¿Ya tienes cuenta?',
-            action: 'Ingresar',
-            onTap: () => Navigator.popUntil(context, (route) => route.isFirst),
+          Text('Crea tu cuenta', style: FdTypography.display),
+          const SizedBox(height: FdSpacing.xs),
+          Text(
+            'Mascotas y objetos perdidos en tu barrio',
+            style: FdTypography.caption,
           ),
+          const SizedBox(height: FdSpacing.lg),
+          AccountTypeSwitch(
+            isStudent: false,
+            onChanged: (student) {
+              if (student) {
+                Navigator.pushReplacementNamed(
+                  context,
+                  AppRoutes.registerStudent,
+                );
+              }
+            },
+          ),
+          const SizedBox(height: FdSpacing.lg),
+          FdTextField(
+            label: 'Nombre completo',
+            controller: _name,
+            textInputAction: TextInputAction.next,
+            errorText: _submitted && _name.text.trim().isEmpty
+                ? 'Escribe tu nombre'
+                : null,
+          ),
+          const SizedBox(height: FdSpacing.sm),
+          FdTextField(
+            label: 'Celular',
+            hint: '300 123 4567',
+            controller: _phone,
+            keyboardType: TextInputType.phone,
+            textInputAction: TextInputAction.next,
+            errorText: _submitted ? _phoneError : null,
+          ),
+          const SizedBox(height: FdSpacing.sm),
+          FdTextField(
+            label: 'Contraseña',
+            controller: _password,
+            isPassword: true,
+            errorText: _submitted && _password.text.length < 8
+                ? 'Mínimo 8 caracteres'
+                : null,
+          ),
+          const SizedBox(height: FdSpacing.sm),
+          TermsCheck(
+            value: _terms,
+            onChanged: (v) => setState(() => _terms = v),
+          ),
+          if (_submitted && !_terms)
+            Text(
+              'Debes aceptar los términos',
+              style: FdTypography.caption.copyWith(color: FdColors.lost),
+            ),
         ],
       ),
-      children: [
-        Text('Crea tu cuenta', style: FdTypography.display),
-        const SizedBox(height: FdSpacing.xs),
-        Text('Mascotas y objetos perdidos en tu barrio', style: FdTypography.caption),
-        const SizedBox(height: FdSpacing.lg),
-        AccountTypeSwitch(
-          isStudent: false,
-          onChanged: (student) {
-            if (student) Navigator.pushReplacementNamed(context, AppRoutes.registerStudent);
-          },
-        ),
-        const SizedBox(height: FdSpacing.lg),
-        FdTextField(
-          label: 'Nombre completo',
-          controller: _name,
-          textInputAction: TextInputAction.next,
-          errorText: _submitted && _name.text.trim().isEmpty ? 'Escribe tu nombre' : null,
-        ),
-        const SizedBox(height: FdSpacing.sm),
-        FdTextField(
-          label: 'Celular',
-          hint: '300 123 4567',
-          controller: _phone,
-          keyboardType: TextInputType.phone,
-          textInputAction: TextInputAction.next,
-          errorText: _submitted ? _phoneError : null,
-        ),
-        const SizedBox(height: FdSpacing.sm),
-        FdTextField(
-          label: 'Contraseña',
-          controller: _password,
-          isPassword: true,
-          errorText: _submitted && _password.text.length < 8 ? 'Mínimo 8 caracteres' : null,
-        ),
-        const SizedBox(height: FdSpacing.sm),
-        TermsCheck(value: _terms, onChanged: (v) => setState(() => _terms = v)),
-        if (_submitted && !_terms)
-          Text('Debes aceptar los términos', style: FdTypography.caption.copyWith(color: FdColors.lost)),
-      ],
     );
   }
 }

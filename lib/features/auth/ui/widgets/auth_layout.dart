@@ -24,12 +24,22 @@ class AuthLayout extends StatelessWidget {
           FdScreenHeader(title: headerTitle, showBack: showBack),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.fromLTRB(FdSpacing.screen, FdSpacing.xs, FdSpacing.screen, FdSpacing.lg),
+              padding: const EdgeInsets.fromLTRB(
+                FdSpacing.screen,
+                FdSpacing.xs,
+                FdSpacing.screen,
+                FdSpacing.lg,
+              ),
               children: children,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
             child: bottom,
           ),
         ],
@@ -58,10 +68,15 @@ class TermsCheck extends StatelessWidget {
                 value: value,
                 onChanged: (v) => onChanged(v ?? false),
                 activeColor: FdColors.primary,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
               ),
               Expanded(
-                child: Text('Acepto los términos y la política de datos', style: FdTypography.body),
+                child: Text(
+                  'Acepto los términos y la política de datos',
+                  style: FdTypography.body,
+                ),
               ),
             ],
           ),
@@ -72,7 +87,11 @@ class TermsCheck extends StatelessWidget {
 }
 
 class AccountTypeSwitch extends StatelessWidget {
-  const AccountTypeSwitch({super.key, required this.isStudent, required this.onChanged});
+  const AccountTypeSwitch({
+    super.key,
+    required this.isStudent,
+    required this.onChanged,
+  });
 
   final bool isStudent;
   final ValueChanged<bool> onChanged;
@@ -88,7 +107,12 @@ class AccountTypeSwitch extends StatelessWidget {
 }
 
 class AuthFooterLink extends StatelessWidget {
-  const AuthFooterLink({super.key, required this.question, required this.action, required this.onTap});
+  const AuthFooterLink({
+    super.key,
+    required this.question,
+    required this.action,
+    required this.onTap,
+  });
 
   final String question;
   final String action;
@@ -102,7 +126,10 @@ class AuthFooterLink extends StatelessWidget {
         Text(question, style: FdTypography.caption),
         TextButton(
           onPressed: onTap,
-          child: Text(action, style: FdTypography.bodyStrong.copyWith(color: FdColors.primary)),
+          child: Text(
+            action,
+            style: FdTypography.bodyStrong.copyWith(color: FdColors.primary),
+          ),
         ),
       ],
     );
