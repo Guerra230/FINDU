@@ -10,17 +10,20 @@ class PublishedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
-    final kind = args is String ? args : PublishKinds.petLost;
+    final published = args is PublishedArgs ? args : null;
+    final kind = published?.kind ?? PublishKinds.petLost;
     final isPet = kind == PublishKinds.petLost || kind == PublishKinds.petFound;
-    final isLost = kind == PublishKinds.objectLost || kind == PublishKinds.petLost;
+    final isLost =
+        kind == PublishKinds.objectLost || kind == PublishKinds.petLost;
 
     final title = switch (kind) {
-      PublishKinds.objectLost || PublishKinds.objectFound => '¡Objeto publicado!',
+      PublishKinds.objectLost ||
+      PublishKinds.objectFound => '¡Objeto publicado!',
       PublishKinds.petLost => '¡Reporte publicado!',
       _ => '¡Mascota reportada!',
     };
     final message = isLost
-        ? 'Alertamos a 128 vecinos a menos de 1 km. Te avisaremos cuando alguien lo vea.'
+        ? 'Ya es visible para todos en FINDU. Te avisaremos cuando alguien lo encuentre.'
         : 'Solo quien responda bien tus preguntas privadas podrá contactarte.';
 
     return Scaffold(
@@ -37,31 +40,45 @@ class PublishedScreen extends StatelessWidget {
               children: [
                 Text(title, style: FdTypography.h1),
                 const SizedBox(height: FdSpacing.xs),
-                Text(message, style: FdTypography.body.copyWith(color: FdColors.textSecondary)),
+                Text(
+                  message,
+                  style: FdTypography.body.copyWith(
+                    color: FdColors.textSecondary,
+                  ),
+                ),
                 const SizedBox(height: FdSpacing.lg),
                 if (isLost)
-                  const Row(
-                    children: [
-                      Expanded(child: _Stat(value: '1 km', label: 'Radio de alerta')),
-                      SizedBox(width: FdSpacing.sm),
-                      Expanded(child: _Stat(value: '128', label: 'Vecinos avisados')),
-                    ],
+                  FdButton(
+                    label: 'Ver mi publicación',
+                    variant: FdButtonVariant.secondary,
+                    onPressed: () => Navigator.pushNamed(
+                      context,
+                      AppRoutes.postDetail,
+                      arguments: published?.postId,
+                    ),
                   )
                 else
                   const FdInfoNote(
                     icon: Icons.lock_outline_rounded,
-                    message: 'Tus 3 preguntas privadas están activas. Las respuestas nunca se muestran.',
+                    message:
+                        'Tus 3 preguntas privadas están activas. Las respuestas nunca se muestran.',
                   ),
                 const SizedBox(height: FdSpacing.md),
                 if (isLost)
                   const FdInfoNote(
-                    message: 'Consejo: comparte el reporte en los grupos de tu barrio o de tu universidad.',
+                    message:
+                        'Consejo: comparte el reporte en los grupos de tu barrio o de tu universidad.',
                   ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
             child: SafeArea(
               top: false,
               child: Column(
@@ -71,39 +88,26 @@ class PublishedScreen extends StatelessWidget {
                       label: 'Compartir reporte',
                       icon: Icons.ios_share_rounded,
                       variant: FdButtonVariant.secondary,
-                      onPressed: () => Navigator.pushNamed(context, AppRoutes.shareReport, arguments: isPet ? 'luna' : 'xiaomi'),
+                      onPressed: () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.shareReport,
+                        arguments: published?.postId,
+                      ),
                     ),
                     const SizedBox(height: FdSpacing.sm),
                   ],
                   FdButton(
                     label: 'Volver al inicio',
-                    onPressed: () => Navigator.pushNamedAndRemoveUntil(context, AppRoutes.main, (_) => false),
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRoutes.main,
+                      (_) => false,
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Stat extends StatelessWidget {
-  const _Stat({required this.value, required this.label});
-
-  final String value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return FdGlass(
-      strong: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(value, style: FdTypography.h1.copyWith(color: FdColors.primary)),
-          Text(label, style: FdTypography.caption),
         ],
       ),
     );

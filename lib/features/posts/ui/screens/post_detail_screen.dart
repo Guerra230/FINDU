@@ -1,30 +1,56 @@
 import 'package:flutter/material.dart';
 
-import 'package:findu/core/demo/demo_data.dart';
-import 'package:findu/core/demo/demo_visuals.dart';
 import 'package:findu/core/design_system/design_system.dart';
+import 'package:findu/core/models/post.dart';
 import 'package:findu/core/navigation/app_routes.dart';
+import 'package:findu/core/utils/formatters.dart';
+import 'package:findu/features/posts/ui/widgets/post_loader.dart';
 
 class PostDetailScreen extends StatelessWidget {
   const PostDetailScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final post = DemoData.post(routeId(context));
-    final isFoundByOther = post.intent == PostIntent.found && !post.isMine;
-    final isLostByOther = post.intent == PostIntent.lost && !post.isMine;
+    return PostLoader(
+      postId: routeId(context),
+      builder: (context, post) => _PostDetailView(post: post),
+    );
+  }
+}
+
+class _PostDetailView extends StatelessWidget {
+  const _PostDetailView({required this.post});
+
+  final Post post;
+
+  @override
+  Widget build(BuildContext context) {
+    final isFoundByOther = !post.isLost && !post.isMine;
+    final isLostByOther = post.isLost && !post.isMine;
 
     final String actionLabel;
-    final VoidCallback onAction;
-    if (post.isMine) {
+    final VoidCallback? onAction;
+    if (post.isDelivered) {
+      actionLabel = 'Ya fue entregado';
+      onAction = null;
+    } else if (post.isMine) {
       actionLabel = 'Impulsar publicación';
-      onAction = () => Navigator.pushNamed(context, AppRoutes.boost, arguments: post.id);
+      onAction = () =>
+          Navigator.pushNamed(context, AppRoutes.boost, arguments: post.id);
     } else if (isFoundByOther) {
       actionLabel = 'Es ${post.feminine ? 'mía' : 'mío'}';
-      onAction = () => Navigator.pushNamed(context, AppRoutes.verificationIntro, arguments: post.id);
+      onAction = () => Navigator.pushNamed(
+        context,
+        AppRoutes.verificationIntro,
+        arguments: post.id,
+      );
     } else {
       actionLabel = post.feminine ? 'La encontré' : 'Lo encontré';
-      onAction = () => Navigator.pushNamed(context, AppRoutes.foundReport, arguments: post.id);
+      onAction = () => Navigator.pushNamed(
+        context,
+        AppRoutes.foundReport,
+        arguments: post.id,
+      );
     }
 
     return Scaffold(
@@ -41,16 +67,25 @@ class PostDetailScreen extends StatelessWidget {
                       height: 320,
                       decoration: BoxDecoration(
                         gradient: post.image == null ? FdGradients.hero : null,
-                        image: post.image == null ? null : DecorationImage(image: post.image!, fit: BoxFit.cover),
+                        image: post.image == null
+                            ? null
+                            : DecorationImage(
+                                image: post.image!,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                       alignment: Alignment.center,
                       child: post.image == null
-                          ? Icon(post.icon, size: 120, color: FdColors.onPrimary.withValues(alpha: 0.85))
+                          ? Icon(
+                              post.icon,
+                              size: 120,
+                              color: FdColors.onPrimary.withValues(alpha: 0.85),
+                            )
                           : null,
                     ),
                     SafeArea(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: FdSpacing.md, vertical: FdSpacing.md),
+                        padding: const EdgeInsets.all(FdSpacing.md),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -62,7 +97,11 @@ class PostDetailScreen extends StatelessWidget {
                             FdIconButton(
                               icon: Icons.ios_share_rounded,
                               tooltip: 'Compartir',
-                              onPressed: () => Navigator.pushNamed(context, AppRoutes.shareReport, arguments: post.id),
+                              onPressed: () => Navigator.pushNamed(
+                                context,
+                                AppRoutes.shareReport,
+                                arguments: post.id,
+                              ),
                             ),
                           ],
                         ),
@@ -83,22 +122,42 @@ class PostDetailScreen extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(post.title, style: FdTypography.h1),
-                                Text(post.category, style: FdTypography.caption),
+                                Text(
+                                  post.breed == null
+                                      ? post.category
+                                      : '${post.category} · ${post.breed}',
+                                  style: FdTypography.caption,
+                                ),
                               ],
                             ),
                           ),
                           FdBadge.status(post.status, feminine: post.feminine),
                         ],
                       ),
+                      if (post.description != null &&
+                          post.description!.isNotEmpty &&
+                          post.description != post.title) ...[
+                        const SizedBox(height: FdSpacing.sm),
+                        Text(post.description!, style: FdTypography.body),
+                      ],
                       const SizedBox(height: FdSpacing.md),
                       Row(
                         children: [
-                          Expanded(child: _InfoCell(label: post.isPet ? 'Especie' : 'Categoría', value: post.category)),
+                          Expanded(
+                            child: _InfoCell(
+                              label: post.isPet ? 'Especie' : 'Categoría',
+                              value: post.category,
+                            ),
+                          ),
                           const SizedBox(width: FdSpacing.sm),
                           Expanded(
                             child: _InfoCell(
-                              label: post.reward != null ? 'Recompensa' : 'Publicado',
-                              value: post.reward != null ? formatCop(post.reward!) : post.ago,
+                              label: post.reward != null
+                                  ? 'Recompensa'
+                                  : 'Publicado',
+                              value: post.reward != null
+                                  ? formatCop(post.reward!)
+                                  : post.ago,
                             ),
                           ),
                         ],
@@ -106,41 +165,63 @@ class PostDetailScreen extends StatelessWidget {
                       const SizedBox(height: FdSpacing.sm),
                       FdGlass(
                         strong: true,
-                        onTap: () => Navigator.pushNamed(context, AppRoutes.map, arguments: post.id),
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          AppRoutes.map,
+                          arguments: post.id,
+                        ),
                         child: Row(
                           children: [
-                            const Icon(Icons.location_on_outlined, color: FdColors.primary),
+                            const Icon(
+                              Icons.location_on_outlined,
+                              color: FdColors.primary,
+                            ),
                             const SizedBox(width: FdSpacing.sm),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Última vez visto', style: FdTypography.label),
-                                  Text('${post.place} · ${post.ago}', style: FdTypography.bodyStrong),
+                                  Text(
+                                    'Última vez visto',
+                                    style: FdTypography.label,
+                                  ),
+                                  Text(
+                                    '${post.place} · ${post.ago}',
+                                    style: FdTypography.bodyStrong,
+                                  ),
                                 ],
                               ),
                             ),
-                            Text('Ver mapa', style: FdTypography.bodyStrong.copyWith(color: FdColors.primary)),
+                            Text(
+                              'Ver mapa',
+                              style: FdTypography.bodyStrong.copyWith(
+                                color: FdColors.primary,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(height: FdSpacing.sm),
                       FdListRow(
-                        leading: FdAvatar(name: post.author),
-                        title: post.author,
+                        leading: FdAvatar(name: post.authorName),
+                        title: post.isMine
+                            ? '${post.authorName} (tú)'
+                            : post.authorName,
                         subtitle: 'Publicado ${post.ago}',
                       ),
-                      if (isFoundByOther) ...[
+                      if (isFoundByOther && !post.isDelivered) ...[
                         const SizedBox(height: FdSpacing.md),
                         const FdInfoNote(
                           icon: Icons.lock_outline_rounded,
-                          message: 'Para hablar con quien lo encontró debes responder 3 preguntas privadas. Tienes 2 intentos.',
+                          message:
+                              'Para hablar con quien lo encontró debes responder 3 preguntas privadas. Tienes 2 intentos.',
                         ),
                       ],
-                      if (isLostByOther) ...[
+                      if (isLostByOther && !post.isDelivered) ...[
                         const SizedBox(height: FdSpacing.md),
                         const FdInfoNote(
-                          message: 'Si lo encontraste, envía fotos y se abre el chat con el dueño. La recompensa se libera al confirmar la entrega.',
+                          message:
+                              'Si lo encontraste, envía fotos y se abre el chat con el dueño. La recompensa se libera al confirmar la entrega.',
                         ),
                       ],
                     ],
@@ -150,8 +231,22 @@ class PostDetailScreen extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
-            child: SafeArea(top: false, child: FdButton(label: actionLabel, icon: Icons.chat_bubble_outline_rounded, onPressed: onAction)),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
+            child: SafeArea(
+              top: false,
+              child: FdButton(
+                label: actionLabel,
+                icon: post.isMine
+                    ? Icons.trending_up_rounded
+                    : Icons.chat_bubble_outline_rounded,
+                onPressed: onAction,
+              ),
+            ),
           ),
         ],
       ),
