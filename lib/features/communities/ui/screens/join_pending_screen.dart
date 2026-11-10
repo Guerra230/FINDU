@@ -10,7 +10,9 @@ class JoinPendingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
-    final community = args is String && args.isNotEmpty ? args : 'Conjunto Bosques de Lili';
+    final community = args is String && args.isNotEmpty
+        ? args
+        : 'Conjunto Bosques de Lili';
 
     return Scaffold(
       backgroundColor: FdColors.background,
@@ -25,18 +27,29 @@ class JoinPendingScreen extends StatelessWidget {
                 const SizedBox(height: FdSpacing.xs),
                 Text(
                   'El administrador de $community revisará tu solicitud. Te avisaremos cuando te acepte.',
-                  style: FdTypography.body.copyWith(color: FdColors.textSecondary),
+                  style: FdTypography.body.copyWith(
+                    color: FdColors.textSecondary,
+                  ),
                 ),
                 const SizedBox(height: FdSpacing.lg),
                 const StatusTimeline(
-                  steps: ['Solicitud enviada', 'El admin la está revisando', 'Ya eres miembro'],
+                  steps: [
+                    'Solicitud enviada',
+                    'El admin la está revisando',
+                    'Ya eres miembro',
+                  ],
                   current: 1,
                 ),
               ],
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(FdSpacing.screen, 0, FdSpacing.screen, FdSpacing.md),
+            padding: const EdgeInsets.fromLTRB(
+              FdSpacing.screen,
+              0,
+              FdSpacing.screen,
+              FdSpacing.md,
+            ),
             child: SafeArea(
               top: false,
               child: Column(
@@ -50,7 +63,11 @@ class JoinPendingScreen extends StatelessWidget {
                   const SizedBox(height: FdSpacing.sm),
                   FdButton(
                     label: 'Volver al inicio',
-                    onPressed: () => Navigator.pushNamedAndRemoveUntil(context, AppRoutes.main, (_) => false),
+                    onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      AppRoutes.main,
+                      (_) => false,
+                    ),
                   ),
                 ],
               ),

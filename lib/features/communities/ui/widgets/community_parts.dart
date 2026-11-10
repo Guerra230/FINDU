@@ -31,20 +31,34 @@ class StatusTimeline extends StatelessWidget {
                   height: 28,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: i <= current ? FdColors.primary : FdColors.background,
-                    border: Border.all(color: i <= current ? FdColors.primary : FdColors.border),
+                    color: i <= current
+                        ? FdColors.primary
+                        : FdColors.background,
+                    border: Border.all(
+                      color: i <= current ? FdColors.primary : FdColors.border,
+                    ),
                   ),
                   child: Icon(
-                    i < current ? Icons.check_rounded : (i == current ? Icons.more_horiz_rounded : Icons.circle_outlined),
+                    i < current
+                        ? Icons.check_rounded
+                        : (i == current
+                              ? Icons.more_horiz_rounded
+                              : Icons.circle_outlined),
                     size: 16,
-                    color: i <= current ? FdColors.onPrimary : FdColors.textDisabled,
+                    color: i <= current
+                        ? FdColors.onPrimary
+                        : FdColors.textDisabled,
                   ),
                 ),
                 const SizedBox(width: FdSpacing.sm),
                 Expanded(
                   child: Text(
                     steps[i],
-                    style: i <= current ? FdTypography.bodyStrong : FdTypography.body.copyWith(color: FdColors.textSecondary),
+                    style: i <= current
+                        ? FdTypography.bodyStrong
+                        : FdTypography.body.copyWith(
+                            color: FdColors.textSecondary,
+                          ),
                   ),
                 ),
               ],
@@ -70,7 +84,10 @@ class RoleChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: FdSpacing.sm, vertical: FdSpacing.xxs),
+      padding: const EdgeInsets.symmetric(
+        horizontal: FdSpacing.sm,
+        vertical: FdSpacing.xxs,
+      ),
       decoration: BoxDecoration(
         color: highlighted ? FdColors.primary : FdColors.primarySoft,
         borderRadius: BorderRadius.circular(FdRadius.pill),
