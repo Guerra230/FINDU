@@ -66,5 +66,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>FINDU usa tus fotos para publicar objetos y mascotas.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>FINDU usa la cámara para tomar fotos de lo que perdiste o encontraste.</string>
 </dict>
 </plist>

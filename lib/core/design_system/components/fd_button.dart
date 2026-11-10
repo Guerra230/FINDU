@@ -49,7 +49,10 @@ class FdButton extends StatelessWidget {
     final content = isLoading
         ? SizedBox.square(
             dimension: 22,
-            child: CircularProgressIndicator(strokeWidth: 2.4, color: foreground),
+            child: CircularProgressIndicator(
+              strokeWidth: 2.4,
+              color: foreground,
+            ),
           )
         : Row(
             mainAxisSize: MainAxisSize.min,
@@ -58,7 +61,13 @@ class FdButton extends StatelessWidget {
                 Icon(icon, size: 20, color: foreground),
                 const SizedBox(width: 8),
               ],
-              Flexible(child: Text(label, overflow: TextOverflow.ellipsis, style: textStyle)),
+              Flexible(
+                child: Text(
+                  label,
+                  overflow: TextOverflow.ellipsis,
+                  style: textStyle,
+                ),
+              ),
             ],
           );
 
@@ -71,7 +80,9 @@ class FdButton extends StatelessWidget {
             borderRadius: radius,
             gradient: FdGradients.button,
             boxShadow: enabled ? FdEffects.buttonShadow : null,
-            border: Border.all(color: FdColors.glassBorder.withValues(alpha: 0.45)),
+            border: Border.all(
+              color: FdColors.glassBorder.withValues(alpha: 0.45),
+            ),
           ),
           child: Material(
             color: Colors.transparent,
@@ -79,7 +90,10 @@ class FdButton extends StatelessWidget {
             child: InkWell(
               borderRadius: radius,
               onTap: enabled ? onPressed : null,
-              child: SizedBox(height: height, child: Center(child: content)),
+              child: SizedBox(
+                height: height,
+                child: Center(child: content),
+              ),
             ),
           ),
         );
@@ -89,22 +103,33 @@ class FdButton extends StatelessWidget {
           strong: true,
           padding: EdgeInsets.zero,
           onTap: enabled ? onPressed : null,
-          child: SizedBox(height: height, child: Center(child: content)),
+          child: SizedBox(
+            height: height,
+            child: Center(child: content),
+          ),
         );
       case FdButtonVariant.danger:
         button = Material(
           color: FdColors.surface,
-          shape: const StadiumBorder(side: BorderSide(color: FdColors.lost, width: 1.5)),
+          shape: const StadiumBorder(
+            side: BorderSide(color: FdColors.lost, width: 1.5),
+          ),
           child: InkWell(
             customBorder: const StadiumBorder(),
             onTap: enabled ? onPressed : null,
-            child: SizedBox(height: height, child: Center(child: content)),
+            child: SizedBox(
+              height: height,
+              child: Center(child: content),
+            ),
           ),
         );
       case FdButtonVariant.ghost:
         button = TextButton(
           onPressed: enabled ? onPressed : null,
-          style: TextButton.styleFrom(minimumSize: Size(0, height), shape: const StadiumBorder()),
+          style: TextButton.styleFrom(
+            minimumSize: Size(0, height),
+            shape: const StadiumBorder(),
+          ),
           child: content,
         );
     }
@@ -114,7 +139,9 @@ class FdButton extends StatelessWidget {
       enabled: enabled,
       child: Opacity(
         opacity: onPressed == null ? 0.5 : 1,
-        child: expand ? SizedBox(width: double.infinity, child: button) : button,
+        child: expand
+            ? SizedBox(width: double.infinity, child: button)
+            : button,
       ),
     );
   }

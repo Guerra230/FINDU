@@ -27,7 +27,9 @@ class FdResultHero extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         gradient: isProblem ? FdGradients.problem : FdGradients.hero,
-        borderRadius: const BorderRadius.vertical(bottom: Radius.circular(FdRadius.xl)),
+        borderRadius: const BorderRadius.vertical(
+          bottom: Radius.circular(FdRadius.xl),
+        ),
       ),
       child: Stack(
         children: [
@@ -38,7 +40,10 @@ class FdResultHero extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white.withValues(alpha: 0.32),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.75), width: 1.5),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.75),
+                  width: 1.5,
+                ),
               ),
               alignment: Alignment.center,
               child: FdMascot(mood: mood, size: 140),
@@ -48,7 +53,10 @@ class FdResultHero extends StatelessWidget {
             left: FdSpacing.screen,
             bottom: FdSpacing.md,
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: FdSpacing.sm, vertical: 6),
+              padding: const EdgeInsets.symmetric(
+                horizontal: FdSpacing.sm,
+                vertical: 6,
+              ),
               decoration: BoxDecoration(
                 color: Colors.white.withValues(alpha: 0.6),
                 borderRadius: BorderRadius.circular(FdRadius.pill),

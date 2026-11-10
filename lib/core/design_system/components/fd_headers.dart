@@ -57,7 +57,12 @@ class FdScreenHeader extends StatelessWidget {
 }
 
 class FdLargeTitle extends StatelessWidget {
-  const FdLargeTitle({super.key, required this.title, this.subtitle, this.trailing});
+  const FdLargeTitle({
+    super.key,
+    required this.title,
+    this.subtitle,
+    this.trailing,
+  });
 
   final String title;
   final String? subtitle;
@@ -66,7 +71,12 @@ class FdLargeTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(FdSpacing.screen, FdSpacing.lg, FdSpacing.screen, FdSpacing.sm),
+      padding: const EdgeInsets.fromLTRB(
+        FdSpacing.screen,
+        FdSpacing.lg,
+        FdSpacing.screen,
+        FdSpacing.sm,
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -77,7 +87,12 @@ class FdLargeTitle extends StatelessWidget {
                 Text(title, style: FdTypography.display),
                 if (subtitle != null) ...[
                   const SizedBox(height: FdSpacing.xxs),
-                  Text(subtitle!, style: FdTypography.display.copyWith(color: FdColors.textDisabled)),
+                  Text(
+                    subtitle!,
+                    style: FdTypography.display.copyWith(
+                      color: FdColors.textDisabled,
+                    ),
+                  ),
                 ],
               ],
             ),
@@ -90,7 +105,12 @@ class FdLargeTitle extends StatelessWidget {
 }
 
 class FdSectionHeader extends StatelessWidget {
-  const FdSectionHeader({super.key, required this.title, this.actionLabel, this.onAction});
+  const FdSectionHeader({
+    super.key,
+    required this.title,
+    this.actionLabel,
+    this.onAction,
+  });
 
   final String title;
   final String? actionLabel;
@@ -99,7 +119,12 @@ class FdSectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(FdSpacing.screen, FdSpacing.lg, FdSpacing.screen, FdSpacing.sm),
+      padding: const EdgeInsets.fromLTRB(
+        FdSpacing.screen,
+        FdSpacing.lg,
+        FdSpacing.screen,
+        FdSpacing.sm,
+      ),
       child: Row(
         children: [
           Expanded(child: Text(title, style: FdTypography.h2)),

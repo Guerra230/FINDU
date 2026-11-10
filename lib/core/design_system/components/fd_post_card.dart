@@ -40,7 +40,10 @@ class FdPostCard extends StatelessWidget {
       width: width,
       height: height,
       child: DecoratedBox(
-        decoration: BoxDecoration(borderRadius: radius, boxShadow: FdEffects.softShadow),
+        decoration: BoxDecoration(
+          borderRadius: radius,
+          boxShadow: FdEffects.softShadow,
+        ),
         child: ClipRRect(
           borderRadius: radius,
           child: Material(
@@ -53,7 +56,13 @@ class FdPostCard extends StatelessWidget {
                   if (image != null)
                     Image(image: image!, fit: BoxFit.cover)
                   else
-                    Center(child: Icon(icon, size: 64, color: FdColors.primary.withValues(alpha: 0.5))),
+                    Center(
+                      child: Icon(
+                        icon,
+                        size: 64,
+                        color: FdColors.primary.withValues(alpha: 0.5),
+                      ),
+                    ),
                   const DecoratedBox(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
@@ -64,7 +73,11 @@ class FdPostCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(top: FdSpacing.sm, left: FdSpacing.sm, child: FdBadge.status(status, feminine: feminine)),
+                  Positioned(
+                    top: FdSpacing.sm,
+                    left: FdSpacing.sm,
+                    child: FdBadge.status(status, feminine: feminine),
+                  ),
                   if (onMap != null)
                     Positioned(
                       top: FdSpacing.xs,
@@ -72,7 +85,10 @@ class FdPostCard extends StatelessWidget {
                       child: IconButton(
                         tooltip: 'Ver en el mapa',
                         onPressed: onMap,
-                        icon: const Icon(Icons.map_outlined, color: Colors.white),
+                        icon: const Icon(
+                          Icons.map_outlined,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   Positioned(
@@ -91,7 +107,9 @@ class FdPostCard extends StatelessWidget {
                           subtitle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: FdTypography.caption.copyWith(color: Colors.white),
+                          style: FdTypography.caption.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),

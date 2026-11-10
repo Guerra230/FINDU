@@ -26,7 +26,10 @@ class FdChip extends StatelessWidget {
     return Material(
       color: selected ? FdColors.primarySoft : FdColors.glassStrong,
       shape: StadiumBorder(
-        side: BorderSide(color: selected ? FdColors.primary : FdColors.glassBorder, width: selected ? 1.5 : 1),
+        side: BorderSide(
+          color: selected ? FdColors.primary : FdColors.glassBorder,
+          width: selected ? 1.5 : 1,
+        ),
       ),
       child: InkWell(
         customBorder: const StadiumBorder(),
@@ -38,15 +41,24 @@ class FdChip extends StatelessWidget {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (leading != null) ...[leading!, const SizedBox(width: FdSpacing.xs)],
+                if (leading != null) ...[
+                  leading!,
+                  const SizedBox(width: FdSpacing.xs),
+                ],
                 if (icon != null) ...[
-                  Icon(icon, size: 18, color: selected ? FdColors.primary : FdColors.textSecondary),
+                  Icon(
+                    icon,
+                    size: 18,
+                    color: selected ? FdColors.primary : FdColors.textSecondary,
+                  ),
                   const SizedBox(width: FdSpacing.xs),
                 ],
                 Text(
                   label,
                   style: FdTypography.bodyStrong.copyWith(
-                    color: selected ? FdColors.primaryDark : FdColors.textPrimary,
+                    color: selected
+                        ? FdColors.primaryDark
+                        : FdColors.textPrimary,
                   ),
                 ),
               ],
@@ -104,13 +116,19 @@ class FdTag extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: FdSpacing.sm, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: FdSpacing.sm,
+        vertical: 6,
+      ),
       decoration: BoxDecoration(
         color: FdColors.glassStrong,
         borderRadius: BorderRadius.circular(FdRadius.pill),
         border: Border.all(color: FdColors.border),
       ),
-      child: Text(label, style: FdTypography.caption.copyWith(color: FdColors.textPrimary)),
+      child: Text(
+        label,
+        style: FdTypography.caption.copyWith(color: FdColors.textPrimary),
+      ),
     );
   }
 }

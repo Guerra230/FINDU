@@ -72,7 +72,10 @@ class _FindiPainter extends CustomPainter {
     );
     canvas.drawPath(
       body,
-      Paint()..shader = FdGradients.mascot.createShader(const Rect.fromLTWH(0, 0, 160, 150)),
+      Paint()
+        ..shader = FdGradients.mascot.createShader(
+          const Rect.fromLTWH(0, 0, 160, 150),
+        ),
     );
     canvas.save();
     canvas.clipPath(body);
@@ -124,7 +127,12 @@ class _FindiPainter extends CustomPainter {
     }
   }
 
-  void _openEyes(Canvas canvas, Offset leftPupil, Offset rightPupil, double pupil) {
+  void _openEyes(
+    Canvas canvas,
+    Offset leftPupil,
+    Offset rightPupil,
+    double pupil,
+  ) {
     final left = _eyeRect(leftX);
     final right = _eyeRect(rightX);
     _eye(canvas, left);
@@ -145,7 +153,10 @@ class _FindiPainter extends CustomPainter {
   Rect _eyeRect(double x) => Rect.fromLTWH(x, eyeY, eyeW, eyeH);
 
   void _eye(Canvas canvas, Rect rect) {
-    canvas.drawOval(rect.shift(const Offset(0, 2)), Paint()..color = FdColors.primaryDark.withValues(alpha: 0.15));
+    canvas.drawOval(
+      rect.shift(const Offset(0, 2)),
+      Paint()..color = FdColors.primaryDark.withValues(alpha: 0.15),
+    );
     canvas.drawOval(rect, Paint()..color = Colors.white);
     canvas.drawOval(
       rect,
@@ -160,7 +171,10 @@ class _FindiPainter extends CustomPainter {
     canvas.drawCircle(center, d / 2, Paint()..color = FdColors.mascotInk);
     final s = math.max(4.0, d * 0.3);
     canvas.drawCircle(
-      Offset(center.dx - d / 2 + d * 0.18 + s / 2, center.dy - d / 2 + d * 0.15 + s / 2),
+      Offset(
+        center.dx - d / 2 + d * 0.18 + s / 2,
+        center.dy - d / 2 + d * 0.15 + s / 2,
+      ),
       s / 2,
       Paint()..color = Colors.white,
     );

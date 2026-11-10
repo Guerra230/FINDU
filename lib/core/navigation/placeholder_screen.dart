@@ -22,7 +22,9 @@ class PlaceholderScreen extends StatelessWidget {
       body: Column(
         children: [
           FdScreenHeader(title: title, showBack: showBack),
-          Expanded(child: Center(child: PlaceholderBody(figma: figma))),
+          Expanded(
+            child: Center(child: PlaceholderBody(figma: figma)),
+          ),
         ],
       ),
     );
@@ -44,7 +46,9 @@ class TabPlaceholder extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             FdLargeTitle(title: title),
-            Expanded(child: Center(child: PlaceholderBody(figma: figma))),
+            Expanded(
+              child: Center(child: PlaceholderBody(figma: figma)),
+            ),
             const SizedBox(height: 100),
           ],
         ),
@@ -64,7 +68,8 @@ class PlaceholderBody extends StatelessWidget {
       child: FdEmptyState(
         mood: FdMood.buscando,
         title: 'Pantalla $figma en construcción',
-        message: 'La construye ${Team.owner}. Mírala en Figma y ármala con los componentes del design system.',
+        message:
+            'La construye ${Team.owner}. Mírala en Figma y ármala con los componentes del design system.',
         actionLabel: 'Ver todas las pantallas',
         onAction: () => Navigator.pushNamed(context, AppRoutes.devMenu),
       ),

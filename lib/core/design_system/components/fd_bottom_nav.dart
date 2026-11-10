@@ -9,7 +9,11 @@ import 'package:findu/core/design_system/tokens/fd_radius.dart';
 import 'package:findu/core/design_system/tokens/fd_spacing.dart';
 
 class FdNavItem {
-  const FdNavItem({required this.icon, required this.activeIcon, required this.label});
+  const FdNavItem({
+    required this.icon,
+    required this.activeIcon,
+    required this.label,
+  });
 
   final IconData icon;
   final IconData activeIcon;
@@ -36,12 +40,23 @@ class FdBottomNav extends StatelessWidget {
     final children = <Widget>[];
     for (var i = 0; i < items.length; i++) {
       if (i == half) children.add(_CenterButton(onTap: onCenterTap));
-      children.add(_NavButton(item: items[i], selected: i == currentIndex, onTap: () => onTap(i)));
+      children.add(
+        _NavButton(
+          item: items[i],
+          selected: i == currentIndex,
+          onTap: () => onTap(i),
+        ),
+      );
     }
 
     return SafeArea(
       top: false,
-      minimum: const EdgeInsets.fromLTRB(FdSpacing.md, 0, FdSpacing.md, FdSpacing.md),
+      minimum: const EdgeInsets.fromLTRB(
+        FdSpacing.md,
+        0,
+        FdSpacing.md,
+        FdSpacing.md,
+      ),
       child: DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(FdRadius.pill),
@@ -50,7 +65,10 @@ class FdBottomNav extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(FdRadius.pill),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: FdEffects.glassBlur, sigmaY: FdEffects.glassBlur),
+            filter: ImageFilter.blur(
+              sigmaX: FdEffects.glassBlur,
+              sigmaY: FdEffects.glassBlur,
+            ),
             child: Container(
               height: 68,
               padding: const EdgeInsets.symmetric(horizontal: FdSpacing.xs),
@@ -72,7 +90,11 @@ class FdBottomNav extends StatelessWidget {
 }
 
 class _NavButton extends StatelessWidget {
-  const _NavButton({required this.item, required this.selected, required this.onTap});
+  const _NavButton({
+    required this.item,
+    required this.selected,
+    required this.onTap,
+  });
 
   final FdNavItem item;
   final bool selected;
@@ -127,7 +149,11 @@ class _CenterButton extends StatelessWidget {
             gradient: FdGradients.button,
             boxShadow: FdEffects.buttonShadow,
           ),
-          child: const Icon(Icons.add_rounded, color: FdColors.onPrimary, size: 30),
+          child: const Icon(
+            Icons.add_rounded,
+            color: FdColors.onPrimary,
+            size: 30,
+          ),
         ),
       ),
     );

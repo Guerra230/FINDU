@@ -13,8 +13,16 @@ class FdBackground extends StatelessWidget {
       decoration: const BoxDecoration(color: FdColors.background),
       child: Stack(
         children: [
-          const Positioned(top: -90, right: -110, child: _Glow(size: 300, opacity: 0.14)),
-          const Positioned(bottom: 120, left: -130, child: _Glow(size: 280, opacity: 0.08)),
+          const Positioned(
+            top: -90,
+            right: -110,
+            child: _Glow(size: 300, opacity: 0.14),
+          ),
+          const Positioned(
+            bottom: 120,
+            left: -130,
+            child: _Glow(size: 280, opacity: 0.08),
+          ),
           Positioned.fill(child: child),
         ],
       ),
@@ -59,7 +67,9 @@ class FdScaffold extends StatelessWidget {
     return Scaffold(
       backgroundColor: FdColors.background,
       extendBody: true,
-      body: FdBackground(child: SafeArea(bottom: bottomBar == null, child: body)),
+      body: FdBackground(
+        child: SafeArea(bottom: bottomBar == null, child: body),
+      ),
       bottomNavigationBar: bottomBar,
     );
   }

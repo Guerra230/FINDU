@@ -17,7 +17,12 @@ class MainShell extends StatefulWidget {
     if (shell != null) {
       shell._select(tab);
     } else {
-      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.main, (_) => false, arguments: tab);
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.main,
+        (_) => false,
+        arguments: tab,
+      );
     }
   }
 
@@ -38,10 +43,26 @@ class _MainShellState extends State<MainShell> {
   ];
 
   static const _items = <FdNavItem>[
-    FdNavItem(icon: Icons.home_outlined, activeIcon: Icons.home_rounded, label: 'Inicio'),
-    FdNavItem(icon: Icons.explore_outlined, activeIcon: Icons.explore, label: 'Explorar'),
-    FdNavItem(icon: Icons.chat_bubble_outline_rounded, activeIcon: Icons.chat_bubble_rounded, label: 'Chats'),
-    FdNavItem(icon: Icons.account_circle_outlined, activeIcon: Icons.account_circle, label: 'Perfil'),
+    FdNavItem(
+      icon: Icons.home_outlined,
+      activeIcon: Icons.home_rounded,
+      label: 'Inicio',
+    ),
+    FdNavItem(
+      icon: Icons.explore_outlined,
+      activeIcon: Icons.explore,
+      label: 'Explorar',
+    ),
+    FdNavItem(
+      icon: Icons.chat_bubble_outline_rounded,
+      activeIcon: Icons.chat_bubble_rounded,
+      label: 'Chats',
+    ),
+    FdNavItem(
+      icon: Icons.account_circle_outlined,
+      activeIcon: Icons.account_circle,
+      label: 'Perfil',
+    ),
   ];
 
   @override
@@ -54,7 +75,8 @@ class _MainShellState extends State<MainShell> {
         items: _items,
         currentIndex: _index,
         onTap: _select,
-        onCenterTap: () => Navigator.pushNamed(context, AppRoutes.publishObject),
+        onCenterTap: () =>
+            Navigator.pushNamed(context, AppRoutes.publishObject),
       ),
     );
   }

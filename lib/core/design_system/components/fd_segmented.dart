@@ -39,12 +39,16 @@ class FdSegmented<T> extends StatelessWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(FdRadius.pill),
-                      gradient: entry.key == selected ? FdGradients.button : null,
+                      gradient: entry.key == selected
+                          ? FdGradients.button
+                          : null,
                     ),
                     child: Text(
                       entry.value,
                       style: FdTypography.bodyStrong.copyWith(
-                        color: entry.key == selected ? FdColors.onPrimary : FdColors.textPrimary,
+                        color: entry.key == selected
+                            ? FdColors.onPrimary
+                            : FdColors.textPrimary,
                       ),
                     ),
                   ),

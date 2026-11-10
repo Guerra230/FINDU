@@ -36,7 +36,10 @@ abstract final class AppRouter {
 
   static Route<void> unknown(RouteSettings settings) {
     return MaterialPageRoute<void>(
-      builder: (_) => PlaceholderScreen(figma: '?', title: settings.name ?? 'Ruta no encontrada'),
+      builder: (_) => PlaceholderScreen(
+        figma: '?',
+        title: settings.name ?? 'Ruta no encontrada',
+      ),
     );
   }
 }

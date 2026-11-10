@@ -14,7 +14,11 @@ class FdAvatar extends StatelessWidget {
   final ImageProvider? image;
 
   String get initials {
-    final parts = name.trim().split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    final parts = name
+        .trim()
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
     if (parts.isEmpty) return '?';
     return parts.take(2).map((p) => p[0].toUpperCase()).join();
   }
@@ -26,7 +30,13 @@ class FdAvatar extends StatelessWidget {
       backgroundColor: FdColors.primarySoft,
       backgroundImage: image,
       child: image == null
-          ? Text(initials, style: FdTypography.bodyStrong.copyWith(color: FdColors.primary, fontSize: size * 0.34))
+          ? Text(
+              initials,
+              style: FdTypography.bodyStrong.copyWith(
+                color: FdColors.primary,
+                fontSize: size * 0.34,
+              ),
+            )
           : null,
     );
   }
@@ -64,7 +74,12 @@ class FdSteps extends StatelessWidget {
 }
 
 class FdToggleRow extends StatelessWidget {
-  const FdToggleRow({super.key, required this.label, required this.value, required this.onChanged});
+  const FdToggleRow({
+    super.key,
+    required this.label,
+    required this.value,
+    required this.onChanged,
+  });
 
   final String label;
   final bool value;
@@ -84,7 +99,11 @@ class FdToggleRow extends StatelessWidget {
 }
 
 class FdInfoNote extends StatelessWidget {
-  const FdInfoNote({super.key, required this.message, this.icon = Icons.info_outline_rounded});
+  const FdInfoNote({
+    super.key,
+    required this.message,
+    this.icon = Icons.info_outline_rounded,
+  });
 
   final String message;
   final IconData icon;
@@ -102,7 +121,12 @@ class FdInfoNote extends StatelessWidget {
         children: [
           Icon(icon, color: FdColors.primary, size: 20),
           const SizedBox(width: FdSpacing.sm),
-          Expanded(child: Text(message, style: FdTypography.caption.copyWith(color: FdColors.primaryDark))),
+          Expanded(
+            child: Text(
+              message,
+              style: FdTypography.caption.copyWith(color: FdColors.primaryDark),
+            ),
+          ),
         ],
       ),
     );
@@ -130,20 +154,33 @@ class FdListRow extends StatelessWidget {
     return FdGlass(
       strong: true,
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(horizontal: FdSpacing.md, vertical: FdSpacing.sm),
+      padding: const EdgeInsets.symmetric(
+        horizontal: FdSpacing.md,
+        vertical: FdSpacing.sm,
+      ),
       child: Row(
         children: [
-          if (leading != null) ...[leading!, const SizedBox(width: FdSpacing.sm)],
+          if (leading != null) ...[
+            leading!,
+            const SizedBox(width: FdSpacing.sm),
+          ],
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title, style: FdTypography.bodyStrong),
-                if (subtitle != null) Text(subtitle!, style: FdTypography.caption),
+                if (subtitle != null)
+                  Text(subtitle!, style: FdTypography.caption),
               ],
             ),
           ),
-          trailing ?? (onTap != null ? const Icon(Icons.chevron_right_rounded, color: FdColors.primary) : const SizedBox.shrink()),
+          trailing ??
+              (onTap != null
+                  ? const Icon(
+                      Icons.chevron_right_rounded,
+                      color: FdColors.primary,
+                    )
+                  : const SizedBox.shrink()),
         ],
       ),
     );
