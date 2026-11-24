@@ -34,7 +34,9 @@ class _ExploreViewState extends State<_ExploreView> {
       if (_category != null && p.category != _category) return false;
       if (_intent != null && p.intent != _intent) return false;
       if (query.isNotEmpty &&
-          !'${p.title} ${p.place} ${p.category}'.toLowerCase().contains(query)) {
+          !'${p.title} ${p.place} ${p.category}'.toLowerCase().contains(
+            query,
+          )) {
         return false;
       }
       return true;

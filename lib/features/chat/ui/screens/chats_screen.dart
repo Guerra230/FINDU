@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/models/post.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/core/navigation/main_shell.dart';
 import 'package:findu/core/utils/formatters.dart';
 import 'package:findu/features/chat/domain/chat_models.dart';
-import 'package:findu/features/chat/domain/chat_repository.dart';
+
 import 'package:findu/features/chat/ui/bloc/chats_cubit.dart';
 
 enum _ChatFilter { all, unread, objects, pets }
@@ -18,7 +19,7 @@ class ChatsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => ChatsCubit(context.read<ChatRepository>())..load(),
+      create: (context) => sl<ChatsCubit>()..load(),
       child: const _ChatsView(),
     );
   }

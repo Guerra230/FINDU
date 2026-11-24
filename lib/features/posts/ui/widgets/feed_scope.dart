@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/models/post.dart';
-import 'package:findu/features/posts/domain/posts_repository.dart';
+
 import 'package:findu/features/posts/ui/bloc/feed_bloc.dart';
 
 class FeedScope extends StatelessWidget {
@@ -14,8 +15,7 @@ class FeedScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          FeedBloc(context.read<PostsRepository>())..add(const FeedRequested()),
+      create: (context) => sl<FeedBloc>()..add(const FeedRequested()),
       child: child,
     );
   }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:findu/features/auth/domain/auth_repository.dart';
+import 'package:findu/core/di/inyeccion.dart';
+
 import 'package:findu/features/auth/ui/bloc/recovery_cubit.dart';
 
 class RecoveryScope extends StatelessWidget {
@@ -13,7 +14,7 @@ class RecoveryScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RecoveryCubit(context.read<AuthRepository>()),
+      create: (context) => sl<RecoveryCubit>(),
       child: BlocListener<RecoveryCubit, RecoveryState>(
         listener: (context, state) {
           if (state.status == RecoveryStatus.done) onDone(context, state);

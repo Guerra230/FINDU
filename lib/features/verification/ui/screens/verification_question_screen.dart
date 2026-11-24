@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/models/post.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/core/utils/formatters.dart';
 import 'package:findu/features/posts/ui/widgets/post_loader.dart';
-import 'package:findu/features/verification/domain/verification_repository.dart';
+
 import 'package:findu/features/verification/ui/bloc/verification_cubit.dart';
 import 'package:findu/features/verification/ui/widgets/verification_parts.dart';
 
@@ -19,9 +20,7 @@ class VerificationQuestionScreen extends StatelessWidget {
     return PostLoader(
       postId: postId,
       builder: (context, post) => BlocProvider(
-        create: (context) =>
-            VerificationCubit(context.read<VerificationRepository>(), post.id)
-              ..load(),
+        create: (context) => sl<VerificationCubit>(param1: post.id)..load(),
         child: _QuestionView(post: post),
       ),
     );

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/features/auth/domain/auth_models.dart';
-import 'package:findu/features/auth/domain/auth_repository.dart';
+import 'package:findu/features/auth/domain/usecases/auth_usecases.dart';
 
 enum RecoveryStatus { idle, loading, done, failure }
 
@@ -18,24 +18,32 @@ class RecoveryState {
 }
 
 class RecoveryCubit extends Cubit<RecoveryState> {
-  RecoveryCubit(this._repository) : super(const RecoveryState());
+  RecoveryCubit({
+    required EnviarCodigoRecuperacion enviarCodigo,
+    required VerificarCodigoRecuperacion verificarCodigo,
+    required CambiarContrasena cambiarContrasena,
+  }) : _enviarCodigo = enviarCodigo,
+       _verificarCodigo = verificarCodigo,
+       _cambiarContrasena = cambiarContrasena,
+       super(const RecoveryState());
 
-  final AuthRepository _repository;
+  final EnviarCodigoRecuperacion _enviarCodigo;
+  final VerificarCodigoRecuperacion _verificarCodigo;
+  final CambiarContrasena _cambiarContrasena;
 
   Future<void> sendCode(String user) => _run(() async {
-    final email = await _repository.sendRecoveryCode(user);
+    final email = await _enviarCodigo(user);
     emit(RecoveryState(status: RecoveryStatus.done, email: email));
   });
 
   Future<void> verifyCode({required String email, required String code}) =>
       _run(() async {
-        await _repository.verifyRecoveryCode(email: email, code: code);
+        await _verificarCodigo(email: email, code: code);
         emit(RecoveryState(status: RecoveryStatus.done, email: email));
       });
 
   Future<void> updatePassword(String password) => _run(() async {
-    await _repository.updatePassword(password);
-    await _repository.signOut();
+    await _cambiarContrasena(password);
     emit(const RecoveryState(status: RecoveryStatus.done));
   });
 
