@@ -7,7 +7,11 @@ import 'package:findu/core/utils/formatters.dart';
 void main() {
   test('cada pantalla del catálogo tiene su ruta', () {
     for (final screen in screenCatalog) {
-      expect(AppRouter.routes.containsKey(screen.route), isTrue, reason: screen.title);
+      expect(
+        AppRouter.routes.containsKey(screen.route),
+        isTrue,
+        reason: screen.title,
+      );
     }
   });
 
