@@ -36,6 +36,14 @@ flutter run --dart-define-from-file=env.json
 
 Antes hay que crear el proyecto de Supabase y llenar `env.json` con la URL y la anon key. Los pasos están en [docs/supabase.md](docs/supabase.md).
 
+## Generar el APK
+
+```bash
+flutter build apk --release --dart-define-from-file=env.json
+```
+
+El archivo queda en `build/app/outputs/flutter-apk/app-release.apk`.
+
 ## Estructura
 
 ```
@@ -45,8 +53,9 @@ lib/
   core/demo/            datos de ejemplo de comunidades e impulsos
   core/models/          modelo Post compartido entre features
   core/supabase/        inicialización del cliente
+  core/di/              GetIt: registro de dependencias
   core/dev/             índice de pantallas para desarrollo
-  features/<feature>/   domain, data y ui (bloc, screens, widgets) por cada parte de la app
+  features/<feature>/   domain (modelos, repositorio, usecases), data, ui y <feature>_di.dart
 supabase/migrations/    esquema SQL, RLS, funciones y datos iniciales
 docs/                   design system, plan del sprint, flujo de Git y prompt para IA
 ```
@@ -55,6 +64,7 @@ docs/                   design system, plan del sprint, flujo de Git y prompt pa
 
 - [**Modelo de datos**](docs/modelo-de-datos.md)
 - [**Supabase: configuración**](docs/supabase.md)
+- [**Inyección de dependencias con GetIt**](docs/inyeccion-dependencias.md)
 - [Design system](docs/design-system.md)
 - [Sprint 1: plan y pantallas](docs/sprint-1/plan.md)
 - [Cómo trabajo con Git](docs/flujo-git.md)
