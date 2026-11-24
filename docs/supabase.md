@@ -10,7 +10,8 @@
 
 1. En el menú izquierdo abre **SQL Editor** → **New query**.
 2. Copia todo el archivo `supabase/migrations/20261102000000_esquema_findu.sql`, pégalo y dale **Run**.
-3. Debe decir `Success. No rows returned`. En **Table Editor** deben aparecer las 26 tablas.
+3. Debe decir `Success. No rows returned`. En **Table Editor** deben aparecer las 25 tablas.
+4. Haz lo mismo con `supabase/migrations/20261124000000_comunidades_impulsos.sql` (funciones de comunidades, impulsos y métodos de pago).
 
 ## 3. Configurar Auth
 
@@ -54,7 +55,14 @@ Si se te olvida el `--dart-define-from-file`, la app muestra la pantalla "Falta 
 | Entrega | `confirmar_entrega` necesita la confirmación de los dos; `reportar_problema` reactiva la publicación |
 | Notificaciones | Tabla `notificaciones`, se marcan como leídas |
 
-Comunidades, impulsos y pagos siguen con datos de ejemplo (`lib/core/demo/demo_data.dart`) y se conectan en el Sprint 3.
+En el Sprint 3 se conectaron también:
+
+| Parte | Cómo funciona |
+| --- | --- |
+| Comunidades | `crear_comunidad` (quien crea queda como admin y recibe un código), `unirse_con_codigo`, `solicitar_ingreso`, `mis_comunidades`, `activar_comunidad` |
+| Panel del admin | `panel_admin`, `nuevo_codigo`, `resolver_solicitud` (notifica al usuario) |
+| Impulsos | `impulsar_publicacion` registra el pago simulado y el impulso con su fecha de fin |
+| Métodos de pago | `agregar_metodo_pago` guarda solo los últimos 4 dígitos |
 
 ## Seguridad
 

@@ -3,13 +3,14 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/models/post.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/core/utils/formatters.dart';
 import 'package:findu/features/posts/ui/widgets/post_loader.dart';
 import 'package:findu/features/publish/ui/widgets/publish_parts.dart';
-import 'package:findu/features/verification/domain/verification_repository.dart';
+
 import 'package:findu/features/verification/ui/bloc/found_report_cubit.dart';
 import 'package:findu/features/verification/ui/widgets/verification_parts.dart';
 
@@ -21,8 +22,7 @@ class FoundReportScreen extends StatelessWidget {
     return PostLoader(
       postId: routeId(context),
       builder: (context, post) => BlocProvider(
-        create: (context) =>
-            FoundReportCubit(context.read<VerificationRepository>()),
+        create: (context) => sl<FoundReportCubit>(),
         child: _FoundReportView(post: post),
       ),
     );

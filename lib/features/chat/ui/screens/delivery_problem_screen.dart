@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/features/chat/domain/chat_models.dart';
-import 'package:findu/features/chat/domain/chat_repository.dart';
+
 import 'package:findu/features/chat/ui/bloc/chat_cubit.dart';
 
 class DeliveryProblemScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class DeliveryProblemScreen extends StatelessWidget {
     final conversation =
         ModalRoute.of(context)!.settings.arguments! as Conversation;
     return BlocProvider(
-      create: (context) => DeliveryProblemCubit(context.read<ChatRepository>()),
+      create: (context) => sl<DeliveryProblemCubit>(),
       child: _ProblemView(conversation: conversation),
     );
   }

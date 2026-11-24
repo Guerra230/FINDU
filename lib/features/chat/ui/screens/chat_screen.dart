@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/core/utils/formatters.dart';
 import 'package:findu/features/chat/domain/chat_models.dart';
-import 'package:findu/features/chat/domain/chat_repository.dart';
+
 import 'package:findu/features/chat/ui/bloc/chat_cubit.dart';
 
 class ChatScreen extends StatelessWidget {
@@ -25,8 +26,7 @@ class ChatScreen extends StatelessWidget {
       );
     }
     return BlocProvider(
-      create: (context) =>
-          ChatCubit(context.read<ChatRepository>(), id)..load(),
+      create: (context) => sl<ChatCubit>(param1: id)..load(),
       child: const _ChatView(),
     );
   }

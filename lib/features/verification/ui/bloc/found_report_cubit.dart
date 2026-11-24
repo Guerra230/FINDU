@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:findu/features/verification/domain/verification_repository.dart';
+import 'package:findu/features/verification/domain/usecases/verification_usecases.dart';
 
 enum FoundReportStatus { editing, sending, done, failure }
 
@@ -17,9 +17,9 @@ class FoundReportState {
 }
 
 class FoundReportCubit extends Cubit<FoundReportState> {
-  FoundReportCubit(this._repository) : super(const FoundReportState());
+  FoundReportCubit(this._reportarHallazgo) : super(const FoundReportState());
 
-  final VerificationRepository _repository;
+  final ReportarHallazgo _reportarHallazgo;
 
   Future<void> send({
     required String postId,
@@ -29,7 +29,7 @@ class FoundReportCubit extends Cubit<FoundReportState> {
   }) async {
     emit(const FoundReportState(status: FoundReportStatus.sending));
     try {
-      final id = await _repository.reportFound(
+      final id = await _reportarHallazgo(
         postId: postId,
         where: where,
         condition: condition,

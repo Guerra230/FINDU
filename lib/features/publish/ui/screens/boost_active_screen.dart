@@ -1,37 +1,40 @@
 import 'package:flutter/material.dart';
 
-import 'package:findu/core/demo/demo_data.dart';
 import 'package:findu/core/design_system/design_system.dart';
-import 'package:findu/core/models/post.dart';
 import 'package:findu/core/utils/formatters.dart';
-import 'package:findu/features/posts/ui/widgets/post_loader.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/features/publish/ui/screens/boost_screen.dart';
 
 class BoostActiveScreen extends StatelessWidget {
   const BoostActiveScreen({super.key});
 
+  String _remaining(DateTime endsAt) {
+    final diff = endsAt.difference(DateTime.now());
+    if (diff.isNegative) return 'Terminó';
+    return '${diff.inHours} h ${diff.inMinutes.remainder(60)} min';
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments;
-    final boost = args is BoostArgs ? args : null;
-    return PostLoader(
-      postId: boost?.postId,
-      builder: (context, post) =>
-          _BoostActiveView(post: post, planIndex: boost?.planIndex ?? 0),
-    );
-  }
-}
-
-class _BoostActiveView extends StatelessWidget {
-  const _BoostActiveView({required this.post, required this.planIndex});
-
-  final Post post;
-  final int planIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    final plan = DemoData.boostPlans[planIndex];
+    if (args is! BoostArgs) {
+      return FdScaffold(
+        body: Center(
+          child: FdErrorState(
+            message: 'Impulsa una publicación desde su detalle.',
+            onRetry: () => Navigator.maybePop(context),
+          ),
+        ),
+      );
+    }
+    final post = args.post;
+    final plan = args.result.plan;
+    final total = Duration(hours: plan.hours).inMinutes;
+    final left = args.result.endsAt
+        .difference(DateTime.now())
+        .inMinutes
+        .clamp(0, total);
+    final progress = total == 0 ? 1.0 : 1 - left / total;
 
     return Scaffold(
       backgroundColor: FdColors.background,
@@ -83,7 +86,7 @@ class _BoostActiveView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${plan.hours - 1} h 58 min',
+                            _remaining(args.result.endsAt),
                             style: FdTypography.bodyStrong.copyWith(
                               color: FdColors.primary,
                             ),
@@ -93,8 +96,8 @@ class _BoostActiveView extends StatelessWidget {
                       const SizedBox(height: FdSpacing.sm),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(FdRadius.pill),
-                        child: const LinearProgressIndicator(
-                          value: 0.03,
+                        child: LinearProgressIndicator(
+                          value: progress,
                           minHeight: 8,
                           color: FdColors.primary,
                           backgroundColor: FdColors.border,
@@ -102,7 +105,7 @@ class _BoostActiveView extends StatelessWidget {
                       ),
                       const SizedBox(height: FdSpacing.sm),
                       Text(
-                        'Pagaste ${formatCop(plan.price)} con Nequi',
+                        'Pagaste ${formatCop(plan.price)} con ${args.result.method}',
                         style: FdTypography.caption,
                       ),
                     ],

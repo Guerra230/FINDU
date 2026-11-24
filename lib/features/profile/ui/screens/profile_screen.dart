@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/models/post.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/features/auth/ui/bloc/auth_bloc.dart';
-import 'package:findu/features/posts/domain/posts_repository.dart';
+
 import 'package:findu/features/posts/ui/bloc/post_cubit.dart';
 import 'package:findu/features/posts/ui/widgets/post_loader.dart';
 
@@ -15,8 +16,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          MyPostsCubit(context.read<PostsRepository>())..load(),
+      create: (context) => sl<MyPostsCubit>()..load(),
       child: const _ProfileView(),
     );
   }

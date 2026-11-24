@@ -1,13 +1,26 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/features/auth/domain/auth_models.dart';
-import 'package:findu/features/auth/domain/auth_repository.dart';
+import 'package:findu/features/auth/domain/usecases/auth_usecases.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc(this._repository) : super(const AuthState()) {
+  AuthBloc({
+    required HaySesion haySesion,
+    required ObtenerPerfilActual obtenerPerfil,
+    required IniciarSesion iniciarSesion,
+    required RegistrarUniversitario registrarUniversitario,
+    required RegistrarCiudadano registrarCiudadano,
+    required CerrarSesion cerrarSesion,
+  }) : _haySesion = haySesion,
+       _obtenerPerfil = obtenerPerfil,
+       _iniciarSesion = iniciarSesion,
+       _registrarUniversitario = registrarUniversitario,
+       _registrarCiudadano = registrarCiudadano,
+       _cerrarSesion = cerrarSesion,
+       super(const AuthState()) {
     on<AuthStarted>(_onStarted);
     on<AuthLoginRequested>(_onLogin);
     on<AuthStudentSignUpRequested>(_onStudentSignUp);
@@ -15,10 +28,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLogoutRequested>(_onLogout);
   }
 
-  final AuthRepository _repository;
+  final HaySesion _haySesion;
+  final ObtenerPerfilActual _obtenerPerfil;
+  final IniciarSesion _iniciarSesion;
+  final RegistrarUniversitario _registrarUniversitario;
+  final RegistrarCiudadano _registrarCiudadano;
+  final CerrarSesion _cerrarSesion;
 
   Future<void> _onStarted(AuthStarted event, Emitter<AuthState> emit) async {
-    if (!_repository.hasSession) {
+    if (!_haySesion()) {
       emit(const AuthState(status: AuthStatus.unauthenticated));
       return;
     }
@@ -28,7 +46,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   Future<void> _onLogin(AuthLoginRequested event, Emitter<AuthState> emit) =>
       _run(
         emit,
-        () => _repository.signIn(user: event.user, password: event.password),
+        () => _iniciarSesion(user: event.user, password: event.password),
       );
 
   Future<void> _onStudentSignUp(
@@ -36,7 +54,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) => _run(
     emit,
-    () => _repository.signUpStudent(
+    () => _registrarUniversitario(
       draft: event.draft,
       university: event.university,
     ),
@@ -47,7 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) => _run(
     emit,
-    () => _repository.signUpCitizen(
+    () => _registrarCiudadano(
       name: event.name,
       phone: event.phone,
       password: event.password,
@@ -58,7 +76,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthLogoutRequested event,
     Emitter<AuthState> emit,
   ) async {
-    await _repository.signOut();
+    await _cerrarSesion();
     emit(const AuthState(status: AuthStatus.unauthenticated));
   }
 
@@ -83,7 +101,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<void> _loadProfile(Emitter<AuthState> emit) async {
-    final profile = await _repository.currentProfile();
+    final profile = await _obtenerPerfil();
     emit(AuthState(status: AuthStatus.authenticated, profile: profile));
   }
 }

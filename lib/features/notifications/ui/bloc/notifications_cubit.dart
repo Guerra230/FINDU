@@ -1,7 +1,9 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/features/notifications/domain/notifications_repository.dart';
+import 'package:findu/features/notifications/domain/usecases/notifications_usecases.dart';
 
 enum NotificationsStatus { loading, loaded, failure }
 
@@ -18,16 +20,25 @@ class NotificationsState {
 }
 
 class NotificationsCubit extends Cubit<NotificationsState> {
-  NotificationsCubit(this._repository) : super(const NotificationsState());
+  NotificationsCubit({
+    required ObtenerNotificaciones obtenerNotificaciones,
+    required MarcarNotificacionLeida marcarLeida,
+    required MarcarTodasLeidas marcarTodas,
+  }) : _obtenerNotificaciones = obtenerNotificaciones,
+       _marcarLeida = marcarLeida,
+       _marcarTodas = marcarTodas,
+       super(const NotificationsState());
 
-  final NotificationsRepository _repository;
+  final ObtenerNotificaciones _obtenerNotificaciones;
+  final MarcarNotificacionLeida _marcarLeida;
+  final MarcarTodasLeidas _marcarTodas;
 
   Future<void> load() async {
     try {
       emit(
         NotificationsState(
           status: NotificationsStatus.loaded,
-          items: await _repository.all(),
+          items: await _obtenerNotificaciones(),
         ),
       );
     } catch (_) {
@@ -43,14 +54,14 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   Future<void> markRead(AppNotification notification) async {
     if (!notification.unread) return;
     try {
-      await _repository.markRead(notification.id);
+      await _marcarLeida(notification);
       await load();
     } catch (_) {}
   }
 
   Future<void> markAllRead() async {
     try {
-      await _repository.markAllRead();
+      await _marcarTodas();
       await load();
     } catch (_) {}
   }
@@ -64,8 +75,7 @@ class NotificationsScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          NotificationsCubit(context.read<NotificationsRepository>())..load(),
+      create: (_) => sl<NotificationsCubit>()..load(),
       child: child,
     );
   }

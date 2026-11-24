@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/features/auth/domain/auth_models.dart';
-import 'package:findu/features/auth/domain/auth_repository.dart';
+
 import 'package:findu/features/auth/ui/bloc/auth_bloc.dart';
 import 'package:findu/features/auth/ui/bloc/universities_cubit.dart';
 import 'package:findu/features/auth/ui/widgets/auth_layout.dart';
@@ -15,8 +16,7 @@ class ChooseUniversityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          UniversitiesCubit(context.read<AuthRepository>())..load(),
+      create: (context) => sl<UniversitiesCubit>()..load(),
       child: const _ChooseUniversityView(),
     );
   }

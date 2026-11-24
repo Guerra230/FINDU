@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/features/chat/domain/chat_models.dart';
-import 'package:findu/features/chat/domain/chat_repository.dart';
+import 'package:findu/features/chat/domain/usecases/chat_usecases.dart';
 
 enum ChatsStatus { loading, loaded, failure }
 
@@ -16,9 +16,9 @@ class ChatsState {
 }
 
 class ChatsCubit extends Cubit<ChatsState> {
-  ChatsCubit(this._repository) : super(const ChatsState());
+  ChatsCubit(this._obtenerConversaciones) : super(const ChatsState());
 
-  final ChatRepository _repository;
+  final ObtenerConversaciones _obtenerConversaciones;
 
   Future<void> load() async {
     if (state.conversations.isEmpty) emit(const ChatsState());
@@ -26,7 +26,7 @@ class ChatsCubit extends Cubit<ChatsState> {
       emit(
         ChatsState(
           status: ChatsStatus.loaded,
-          conversations: await _repository.conversations(),
+          conversations: await _obtenerConversaciones(),
         ),
       );
     } catch (_) {

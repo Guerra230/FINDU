@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/features/chat/domain/chat_models.dart';
-import 'package:findu/features/chat/domain/chat_repository.dart';
+import 'package:findu/features/chat/domain/usecases/chat_usecases.dart';
 
 enum ChatStatus { loading, ready, failure }
 
@@ -50,9 +50,28 @@ class ChatState {
 }
 
 class ChatCubit extends Cubit<ChatState> {
-  ChatCubit(this._repository, this.conversationId) : super(const ChatState());
+  ChatCubit({
+    required ObtenerConversacion obtenerConversacion,
+    required EscucharMensajes escucharMensajes,
+    required EscucharEntrega escucharEntrega,
+    required EnviarMensaje enviarMensaje,
+    required MarcarMensajesLeidos marcarLeidos,
+    required ConfirmarEntrega confirmarEntrega,
+    required this.conversationId,
+  }) : _obtenerConversacion = obtenerConversacion,
+       _escucharMensajes = escucharMensajes,
+       _escucharEntrega = escucharEntrega,
+       _enviarMensaje = enviarMensaje,
+       _marcarLeidos = marcarLeidos,
+       _confirmarEntrega = confirmarEntrega,
+       super(const ChatState());
 
-  final ChatRepository _repository;
+  final ObtenerConversacion _obtenerConversacion;
+  final EscucharMensajes _escucharMensajes;
+  final EscucharEntrega _escucharEntrega;
+  final EnviarMensaje _enviarMensaje;
+  final MarcarMensajesLeidos _marcarLeidos;
+  final ConfirmarEntrega _confirmarEntrega;
   final String conversationId;
   StreamSubscription<List<ChatMessage>>? _messages;
   StreamSubscription<Delivery>? _delivery;
@@ -60,32 +79,29 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> load() async {
     emit(const ChatState());
     try {
-      final conversation = await _repository.conversation(conversationId);
+      final conversation = await _obtenerConversacion(conversationId);
       emit(
         state.copyWith(status: ChatStatus.ready, conversation: conversation),
       );
       await _messages?.cancel();
       await _delivery?.cancel();
-      _messages = _repository.messages(conversationId).listen((list) {
+      _messages = _escucharMensajes(conversationId).listen((list) {
         emit(state.copyWith(messages: list));
         if (list.any((m) => !m.mine && m.readAt == null)) {
-          _repository.markRead(conversationId).ignore();
+          _marcarLeidos(conversationId).ignore();
         }
       });
-      _delivery = _repository
-          .delivery(conversationId)
-          .listen((d) => emit(state.copyWith(delivery: d)));
+      _delivery = _escucharEntrega(
+        conversationId,
+      ).listen((d) => emit(state.copyWith(delivery: d)));
     } catch (_) {
       emit(const ChatState(status: ChatStatus.failure));
     }
   }
 
   Future<bool> send(String text) async {
-    final value = text.trim();
-    if (value.isEmpty) return false;
     try {
-      await _repository.send(conversationId, value);
-      return true;
+      return await _enviarMensaje(conversationId, text);
     } catch (_) {
       emit(state.copyWith(error: 'No se pudo enviar el mensaje.'));
       return false;
@@ -95,7 +111,7 @@ class ChatCubit extends Cubit<ChatState> {
   Future<void> confirmDelivery() async {
     emit(state.copyWith(confirming: true));
     try {
-      final result = await _repository.confirmDelivery(conversationId);
+      final result = await _confirmarEntrega(conversationId);
       final d = state.delivery;
       final iAmOwner = state.conversation!.iAmOwner;
       emit(
@@ -129,9 +145,9 @@ class ChatCubit extends Cubit<ChatState> {
 enum ProblemStatus { editing, sending, sent, failure }
 
 class DeliveryProblemCubit extends Cubit<ProblemStatus> {
-  DeliveryProblemCubit(this._repository) : super(ProblemStatus.editing);
+  DeliveryProblemCubit(this._reportarProblema) : super(ProblemStatus.editing);
 
-  final ChatRepository _repository;
+  final ReportarProblemaEntrega _reportarProblema;
 
   Future<void> send(
     String conversationId, {
@@ -140,11 +156,7 @@ class DeliveryProblemCubit extends Cubit<ProblemStatus> {
   }) async {
     emit(ProblemStatus.sending);
     try {
-      await _repository.reportProblem(
-        conversationId,
-        reason: reason,
-        detail: detail,
-      );
+      await _reportarProblema(conversationId, reason: reason, detail: detail);
       emit(ProblemStatus.sent);
     } catch (_) {
       emit(ProblemStatus.failure);

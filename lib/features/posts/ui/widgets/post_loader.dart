@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/models/post.dart';
-import 'package:findu/features/posts/domain/posts_repository.dart';
+
 import 'package:findu/features/posts/ui/bloc/post_cubit.dart';
 
 class PostLoader extends StatelessWidget {
@@ -15,8 +16,7 @@ class PostLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          PostCubit(context.read<PostsRepository>())..load(postId),
+      create: (context) => sl<PostCubit>()..load(postId),
       child: BlocBuilder<PostCubit, PostState>(
         builder: (context, state) => switch (state) {
           PostLoaded(:final post) => builder(context, post),

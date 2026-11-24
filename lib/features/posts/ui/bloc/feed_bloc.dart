@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:findu/core/models/post.dart';
-import 'package:findu/features/posts/domain/posts_repository.dart';
+import 'package:findu/features/posts/domain/usecases/posts_usecases.dart';
 
 sealed class FeedEvent {
   const FeedEvent();
@@ -21,11 +21,11 @@ class FeedState {
 }
 
 class FeedBloc extends Bloc<FeedEvent, FeedState> {
-  FeedBloc(this._repository) : super(const FeedState()) {
+  FeedBloc(this._obtenerFeed) : super(const FeedState()) {
     on<FeedRequested>(_onRequested);
   }
 
-  final PostsRepository _repository;
+  final ObtenerFeed _obtenerFeed;
 
   Future<void> _onRequested(
     FeedRequested event,
@@ -33,9 +33,7 @@ class FeedBloc extends Bloc<FeedEvent, FeedState> {
   ) async {
     if (state.posts.isEmpty) emit(const FeedState());
     try {
-      emit(
-        FeedState(status: FeedStatus.loaded, posts: await _repository.feed()),
-      );
+      emit(FeedState(status: FeedStatus.loaded, posts: await _obtenerFeed()));
     } catch (_) {
       emit(FeedState(status: FeedStatus.failure, posts: state.posts));
     }

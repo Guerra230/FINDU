@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
 import 'package:findu/core/navigation/app_routes.dart';
 import 'package:findu/features/posts/domain/posts_repository.dart';
@@ -41,7 +42,7 @@ class PublishScope extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => PublishCubit(context.read<PostsRepository>()),
+      create: (context) => sl<PublishCubit>(),
       child: BlocListener<PublishCubit, PublishState>(
         listener: (context, state) {
           if (state.status == PublishStatus.done && state.postId != null) {
@@ -53,9 +54,10 @@ class PublishScope extends StatelessWidget {
           }
           if (state.status == PublishStatus.failure) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
+              SnackBar(
                 content: Text(
-                  'No pudimos publicar. Revisa tu conexión e intenta de nuevo.',
+                  state.error ??
+                      'No pudimos publicar. Revisa tu conexión e intenta de nuevo.',
                 ),
               ),
             );

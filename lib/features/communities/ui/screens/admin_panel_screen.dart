@@ -1,191 +1,250 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:findu/core/demo/demo_data.dart';
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/design_system/design_system.dart';
+import 'package:findu/features/communities/domain/communities_models.dart';
+import 'package:findu/features/communities/ui/bloc/admin_panel_cubit.dart';
 
-class AdminPanelScreen extends StatefulWidget {
+class AdminPanelScreen extends StatelessWidget {
   const AdminPanelScreen({super.key});
 
   @override
-  State<AdminPanelScreen> createState() => _AdminPanelScreenState();
+  Widget build(BuildContext context) {
+    final community = ModalRoute.of(context)?.settings.arguments;
+    if (community is! Community) {
+      return FdScaffold(
+        body: Center(
+          child: FdErrorState(
+            message: 'Abre el panel desde Mis comunidades.',
+            onRetry: () => Navigator.maybePop(context),
+          ),
+        ),
+      );
+    }
+    return BlocProvider(
+      create: (_) => sl<AdminPanelCubit>(param1: community.id)..load(),
+      child: _AdminPanelView(community: community),
+    );
+  }
 }
 
-class _AdminPanelScreenState extends State<AdminPanelScreen> {
-  String _code = DemoData.accessCode;
-  int _uses = 3;
-  final _requests = <String>['Andrés M.', 'Valentina P.'];
+class _AdminPanelView extends StatelessWidget {
+  const _AdminPanelView({required this.community});
 
-  void _newCode() {
-    final number = 1000 + Random().nextInt(9000);
-    setState(() {
-      _code = 'LILI-$number';
-      _uses = 0;
-    });
-  }
+  final Community community;
 
-  Future<void> _copy() async {
-    await Clipboard.setData(ClipboardData(text: _code));
-    if (!mounted) return;
+  Future<void> _copy(BuildContext context, String code) async {
+    await Clipboard.setData(ClipboardData(text: code));
+    if (!context.mounted) return;
     ScaffoldMessenger.of(
       context,
     ).showSnackBar(const SnackBar(content: Text('Código copiado')));
   }
 
-  void _resolve(String name, bool accepted) {
-    setState(() => _requests.remove(name));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          accepted ? '$name ya es miembro' : 'Rechazaste la solicitud de $name',
-        ),
-      ),
-    );
+  String _expires(DateTime? date) {
+    if (date == null) return '';
+    const months = [
+      'enero',
+      'febrero',
+      'marzo',
+      'abril',
+      'mayo',
+      'junio',
+      'julio',
+      'agosto',
+      'septiembre',
+      'octubre',
+      'noviembre',
+      'diciembre',
+    ];
+    final d = date.toLocal();
+    return ' · vence el ${d.day} de ${months[d.month - 1]}';
   }
 
   @override
   Widget build(BuildContext context) {
-    final community = DemoData.communities.firstWhere((c) => c.isAdmin);
-
-    return FdScaffold(
-      body: Column(
-        children: [
-          const FdScreenHeader(title: 'Panel de administración'),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(
-                FdSpacing.screen,
-                FdSpacing.xs,
-                FdSpacing.screen,
-                FdSpacing.lg,
-              ),
+    return BlocConsumer<AdminPanelCubit, AdminPanelState>(
+      listenWhen: (a, b) =>
+          b.message != null &&
+          a.message != b.message &&
+          b.status == AdminPanelStatus.loaded,
+      listener: (context, state) => ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(state.message!))),
+      builder: (context, state) {
+        final cubit = context.read<AdminPanelCubit>();
+        if (state.status == AdminPanelStatus.loading) {
+          return const FdScaffold(body: FdLoadingState());
+        }
+        final panel = state.panel;
+        if (panel == null) {
+          return FdScaffold(
+            body: Column(
               children: [
-                Text(
-                  '${community.name} · ${community.members} miembros · Eres admin',
-                  style: FdTypography.caption,
-                ),
-                const SizedBox(height: FdSpacing.md),
-                FdGlass(
-                  strong: true,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Código de acceso', style: FdTypography.bodyStrong),
-                      const SizedBox(height: FdSpacing.xs),
-                      Text(
-                        _code,
-                        style: FdTypography.display.copyWith(
-                          color: FdColors.primary,
-                        ),
-                      ),
-                      Text(
-                        '$_uses de 20 usos · vence el 30 de noviembre',
-                        style: FdTypography.caption,
-                      ),
-                      const SizedBox(height: FdSpacing.md),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: FdButton(
-                              label: 'Copiar',
-                              icon: Icons.copy_rounded,
-                              variant: FdButtonVariant.secondary,
-                              onPressed: _copy,
-                            ),
-                          ),
-                          const SizedBox(width: FdSpacing.sm),
-                          Expanded(
-                            child: FdButton(
-                              label: 'Generar nuevo',
-                              variant: FdButtonVariant.secondary,
-                              onPressed: _newCode,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: FdSpacing.lg),
-                Text(
-                  'Solicitudes pendientes (${_requests.length})',
-                  style: FdTypography.h2,
-                ),
-                const SizedBox(height: FdSpacing.sm),
-                if (_requests.isEmpty)
-                  const FdEmptyState(
-                    mood: FdMood.feliz,
-                    title: 'Sin solicitudes',
-                    message:
-                        'Cuando alguien pida unirse sin código, aparecerá aquí.',
-                  )
-                else
-                  for (final name in _requests)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: FdSpacing.sm),
-                      child: FdGlass(
-                        strong: true,
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                FdAvatar(name: name),
-                                const SizedBox(width: FdSpacing.sm),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        name,
-                                        style: FdTypography.bodyStrong,
-                                      ),
-                                      Text(
-                                        'Solicitó unirse sin código',
-                                        style: FdTypography.caption,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: FdSpacing.sm),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: FdButton(
-                                    label: 'Rechazar',
-                                    variant: FdButtonVariant.danger,
-                                    onPressed: () => _resolve(name, false),
-                                  ),
-                                ),
-                                const SizedBox(width: FdSpacing.sm),
-                                Expanded(
-                                  child: FdButton(
-                                    label: 'Aceptar',
-                                    variant: FdButtonVariant.secondary,
-                                    icon: Icons.check_rounded,
-                                    onPressed: () => _resolve(name, true),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
+                const FdScreenHeader(title: 'Panel de administración'),
+                Expanded(
+                  child: Center(
+                    child: FdErrorState(
+                      message: state.message ?? '',
+                      onRetry: cubit.load,
                     ),
-                const SizedBox(height: FdSpacing.sm),
-                const FdInfoNote(
-                  message:
-                      'Solo los administradores pueden aceptar miembros y crear códigos de acceso.',
+                  ),
                 ),
               ],
             ),
+          );
+        }
+        final requests = panel.requests;
+        return FdScaffold(
+          body: Column(
+            children: [
+              const FdScreenHeader(title: 'Panel de administración'),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.fromLTRB(
+                    FdSpacing.screen,
+                    FdSpacing.xs,
+                    FdSpacing.screen,
+                    FdSpacing.lg,
+                  ),
+                  children: [
+                    Text(
+                      '${community.name} · ${community.members} miembros · Eres admin',
+                      style: FdTypography.caption,
+                    ),
+                    const SizedBox(height: FdSpacing.md),
+                    FdGlass(
+                      strong: true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Código de acceso',
+                            style: FdTypography.bodyStrong,
+                          ),
+                          const SizedBox(height: FdSpacing.xs),
+                          Text(
+                            panel.code,
+                            style: FdTypography.display.copyWith(
+                              color: FdColors.primary,
+                            ),
+                          ),
+                          Text(
+                            '${panel.uses} de ${panel.maxUses} usos${_expires(panel.expiresAt)}',
+                            style: FdTypography.caption,
+                          ),
+                          const SizedBox(height: FdSpacing.md),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: FdButton(
+                                  label: 'Copiar',
+                                  icon: Icons.copy_rounded,
+                                  variant: FdButtonVariant.secondary,
+                                  onPressed: () => _copy(context, panel.code),
+                                ),
+                              ),
+                              const SizedBox(width: FdSpacing.sm),
+                              Expanded(
+                                child: FdButton(
+                                  label: 'Generar nuevo',
+                                  variant: FdButtonVariant.secondary,
+                                  onPressed: cubit.newCode,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: FdSpacing.lg),
+                    Text(
+                      'Solicitudes pendientes (${requests.length})',
+                      style: FdTypography.h2,
+                    ),
+                    const SizedBox(height: FdSpacing.sm),
+                    if (requests.isEmpty)
+                      const FdEmptyState(
+                        mood: FdMood.feliz,
+                        title: 'Sin solicitudes',
+                        message:
+                            'Cuando alguien pida unirse sin código, aparecerá aquí.',
+                      )
+                    else
+                      for (final request in requests)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: FdSpacing.sm),
+                          child: FdGlass(
+                            strong: true,
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    FdAvatar(name: request.name),
+                                    const SizedBox(width: FdSpacing.sm),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            request.name,
+                                            style: FdTypography.bodyStrong,
+                                          ),
+                                          Text(
+                                            'Solicitó unirse sin código',
+                                            style: FdTypography.caption,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: FdSpacing.sm),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: FdButton(
+                                        label: 'Rechazar',
+                                        variant: FdButtonVariant.danger,
+                                        onPressed: () => cubit.resolve(
+                                          request,
+                                          accept: false,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: FdSpacing.sm),
+                                    Expanded(
+                                      child: FdButton(
+                                        label: 'Aceptar',
+                                        variant: FdButtonVariant.secondary,
+                                        icon: Icons.check_rounded,
+                                        onPressed: () => cubit.resolve(
+                                          request,
+                                          accept: true,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                    const SizedBox(height: FdSpacing.sm),
+                    const FdInfoNote(
+                      message:
+                          'Solo los administradores pueden aceptar miembros y crear códigos de acceso.',
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

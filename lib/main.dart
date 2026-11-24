@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:findu/app.dart';
+import 'package:findu/core/di/inyeccion.dart';
 import 'package:findu/core/supabase/supabase_setup.dart';
 
 Future<void> main() async {
@@ -10,5 +11,6 @@ Future<void> main() async {
     return;
   }
   await SupabaseSetup.init();
+  configurarDependencias();
   runApp(const FinduApp());
 }

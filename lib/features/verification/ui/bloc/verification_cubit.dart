@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:findu/features/verification/domain/usecases/verification_usecases.dart';
 import 'package:findu/features/verification/domain/verification_repository.dart';
 
 enum VerificationStatus { loading, answering, sending, finished, failure }
@@ -42,15 +43,21 @@ class VerificationState {
 }
 
 class VerificationCubit extends Cubit<VerificationState> {
-  VerificationCubit(this._repository, this.postId)
-    : super(const VerificationState());
+  VerificationCubit({
+    required ObtenerPreguntas obtenerPreguntas,
+    required VerificarRespuestas verificarRespuestas,
+    required this.postId,
+  }) : _obtenerPreguntas = obtenerPreguntas,
+       _verificarRespuestas = verificarRespuestas,
+       super(const VerificationState());
 
-  final VerificationRepository _repository;
+  final ObtenerPreguntas _obtenerPreguntas;
+  final VerificarRespuestas _verificarRespuestas;
   final String postId;
 
   Future<void> load() async {
     try {
-      final questions = await _repository.questions(postId);
+      final questions = await _obtenerPreguntas(postId);
       if (questions.isEmpty) {
         emit(
           const VerificationState(
@@ -95,7 +102,7 @@ class VerificationCubit extends Cubit<VerificationState> {
     }
     emit(state.copyWith(status: VerificationStatus.sending));
     try {
-      final result = await _repository.verify(
+      final result = await _verificarRespuestas(
         postId: postId,
         answers: state.answers,
       );

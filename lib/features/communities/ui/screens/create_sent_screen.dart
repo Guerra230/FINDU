@@ -16,15 +16,15 @@ class CreateSentScreen extends StatelessWidget {
       backgroundColor: FdColors.background,
       body: Column(
         children: [
-          const FdResultHero(mood: FdMood.esperando, tag: 'Solicitud enviada'),
+          const FdResultHero(mood: FdMood.feliz, tag: 'Comunidad creada'),
           Expanded(
             child: ListView(
               padding: const EdgeInsets.all(FdSpacing.screen),
               children: [
-                Text('Solicitud enviada', style: FdTypography.h1),
+                Text('¡$name ya está activa!', style: FdTypography.h1),
                 const SizedBox(height: FdSpacing.xs),
                 Text(
-                  'El equipo FINDU revisará la evidencia de $name. Te avisaremos en máximo 48 h.',
+                  'Eres el administrador. En tu panel encuentras el código de acceso para compartirlo y las solicitudes para unirse.',
                   style: FdTypography.body.copyWith(
                     color: FdColors.textSecondary,
                   ),
@@ -32,11 +32,11 @@ class CreateSentScreen extends StatelessWidget {
                 const SizedBox(height: FdSpacing.lg),
                 const StatusTimeline(
                   steps: [
-                    'Solicitud enviada',
-                    'En revisión',
+                    'Comunidad creada',
+                    'Código de acceso generado',
                     'Comunidad activa y tú como admin',
                   ],
-                  current: 1,
+                  current: 3,
                 ),
               ],
             ),

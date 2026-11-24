@@ -6,7 +6,8 @@ abstract final class SupabaseSetup {
 
   static bool get isConfigured => url.isNotEmpty && anonKey.isNotEmpty;
 
-  static Future<void> init() => Supabase.initialize(url: url, publishableKey: anonKey);
+  static Future<void> init() =>
+      Supabase.initialize(url: url, publishableKey: anonKey);
 
   static SupabaseClient get client => Supabase.instance.client;
 
